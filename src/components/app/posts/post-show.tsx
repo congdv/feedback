@@ -1,6 +1,4 @@
-import { Button } from '@/components/ui/button';
-import type { Post } from '@prisma/client'
-import { FilePenLine } from 'lucide-react';
+import type { Post } from '@prisma/client';
 import { User } from 'next-auth';
 import FeedbackCreateForm from '../feedbacks/feedback-create-form';
 import { fetchTags } from '@/db/queries/tag';
@@ -10,21 +8,29 @@ interface PostShowProps {
   user?: User;
 }
 
-export default async function PostShow({post, user}: PostShowProps) {
+export default async function PostShow({ post, user }: PostShowProps) {
   const tags = await fetchTags();
   const status = await fetchStatus();
 
   return (
-    <div className='p-5 mb-10 border rounded'>
-      <div className='flex justify-between'>
-        <div className='min-h-[36px]'>
+    <div className="p-5 mb-10 border rounded">
+      <div className="flex justify-between">
+        <div className="min-h-[36px]">
           <h1 className="text-lg font-semibold ">{post.title}</h1>
         </div>
-        {user && user.id === post.userId && <div className='flex justify-end'>
-        <FeedbackCreateForm post={post} tags={tags} statusId={post.statusId ?? ""} tagId={post.tagId ?? ""} status={status}/>
-      </div>}
+        {user && user.id === post.userId && (
+          <div className="flex justify-end">
+            <FeedbackCreateForm
+              post={post}
+              tags={tags}
+              statusId={post.statusId ?? ''}
+              tagId={post.tagId ?? ''}
+              status={status}
+            />
+          </div>
+        )}
       </div>
       <p className="text-[15px] content ">{post.content}</p>
     </div>
-  )
+  );
 }
