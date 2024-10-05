@@ -8,8 +8,17 @@ export type PostWithTagAndStatus = ( Post & {
   user: { name: string | null; image: string | null}
 })
 
-export const fetchPosts = cache((): Promise<PostWithTagAndStatus[]> => {
+type FetchFilter = {
+  tag: string | null;
+  status: string | null;
+}
+
+export const fetchPosts = cache((page: number, pageSize: number, filter:FetchFilter): Promise<PostWithTagAndStatus[]> => {
   return DBClient.getInstance().prisma.post.findMany({
+    where: {
+      ...(filter.status && { statusId: filter.status}),
+      ...(filter.tag && { tagId: filter.tag}),
+    },
     include: {
       tag: {
         select: {
@@ -31,6 +40,8 @@ export const fetchPosts = cache((): Promise<PostWithTagAndStatus[]> => {
         }
       }
     },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
     orderBy: {
       updatedAt: "desc"
     }

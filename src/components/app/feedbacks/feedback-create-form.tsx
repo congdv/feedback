@@ -40,7 +40,7 @@ export default function FeedbackCreateForm({post, tagId, statusId, status, tags}
         <Button variant={"ghost"}>
           <FilePenLine height="20px" width="20px" />
         </Button>
-        : <Button variant="default">
+        : <Button variant="default" className="ml-5">
           <CirclePlus className="mr-2 h-4 w-4"/>
             Submit Feedback
         </Button>}
