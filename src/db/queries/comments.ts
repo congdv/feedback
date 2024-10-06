@@ -7,8 +7,13 @@ export type CommentWithAuthor = Comment & {
   user: { name: string | null; image: string | null };
 };
 
-export type Reaction = {
-  reaction: 'LIKE' | 'DISLIKE';
+enum Reaction {
+  LIKE = 'LIKE',
+  DISLIKE = 'DISLIKE',
+}
+
+export type ReactionCount = {
+  reaction: Reaction;
   _count: number;
 };
 
@@ -31,7 +36,7 @@ export const fetchCommentsByPostId = cache(
   }
 );
 
-export const countReactionByCommentId = (commentId: string): Promise<any> => {
+export const countReactionByCommentId = (commentId: string) => {
   return DBClient.getInstance().prisma.commentReaction.groupBy({
     by: ['reaction'],
     where: {

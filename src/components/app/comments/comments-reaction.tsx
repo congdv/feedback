@@ -24,13 +24,13 @@ export default function CommentReaction({
   const [reaction, setReaction] = useState(currentUserReact?.reaction);
 
   const handleLike = () => {
-    setLikes(like + 1);
+    setLikes((prevLike) => prevLike + 1);
     reactToComment(commentId, 'LIKE');
     setReaction('LIKE');
   };
 
   const handleDislike = () => {
-    setDislikes(dislike + 1);
+    setDislikes((prevDislike) => prevDislike + 1);
     reactToComment(commentId, 'DISLIKE');
     setReaction('DISLIKE');
   };
