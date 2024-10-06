@@ -45,6 +45,8 @@ model User {
   post          Post[]
   comment       Comment[]
   reactions     CommentReaction[]
+
+  PostReaction PostReaction[]
 }
 
 model VerificationToken {
@@ -90,6 +92,8 @@ model Post {
   tag      Tag?     @relation(fields: [tagId], references: [id])
   status   Status?     @relation(fields: [statusId], references: [id])
   comments Comment[]
+
+  PostReaction PostReaction[]
 }
 
 model Comment {
@@ -128,4 +132,16 @@ model CommentReaction {
 enum Reaction {
   LIKE
   DISLIKE
+}
+
+model PostReaction {
+  id       String @id @default(cuid())
+  postId   String
+  userId   String
+  upvoteAt DateTime @default(now())
+
+  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
 }
