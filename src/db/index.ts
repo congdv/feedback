@@ -2,17 +2,17 @@ declare global {
   var prisma: PrismaClient; // This must be a `var` and not a `let / const`
 }
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 
 class DBClient {
-  public prisma: PrismaClient
-  private static instance: DBClient
+  public prisma: PrismaClient;
+  private static instance: DBClient;
   private constructor() {
-    this.prisma = new PrismaClient()
-    if(process.env.NODE_ENV === 'production') {
+    this.prisma = new PrismaClient();
+    if (process.env.NODE_ENV === 'production') {
       this.prisma = new PrismaClient();
     } else {
-      if(!global.prisma) {
+      if (!global.prisma) {
         global.prisma = new PrismaClient();
       }
       this.prisma = global.prisma;
@@ -21,10 +21,10 @@ class DBClient {
 
   public static getInstance = () => {
     if (!DBClient.instance) {
-      DBClient.instance = new DBClient()
+      DBClient.instance = new DBClient();
     }
-    return DBClient.instance
-  }
+    return DBClient.instance;
+  };
 }
 
-export default DBClient
+export default DBClient;

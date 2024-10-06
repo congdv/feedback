@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
-  countReactionByCommentId,
   currentUserReactToComment,
   fetchCommentsByPostId,
 } from '@/db/queries/comments';
@@ -24,7 +23,7 @@ export default async function CommentShow({
   user,
 }: CommentShowProps) {
   const comments = await fetchCommentsByPostId(postId);
-  const reaction = await countReactionByCommentId(commentId);
+  // const reaction: ReactionCount[] = await countReactionByCommentId(commentId);
   const currentUserReact = await currentUserReactToComment(commentId);
   const comment = comments.find((c) => c.id === commentId);
   const format = await getFormatter();
@@ -52,14 +51,14 @@ export default async function CommentShow({
 
   const dateTime = new Date(comment.updatedAt);
 
-  const likeCount = reaction
-    .filter((react) => react.reaction === 'LIKE')
-    .map((react) => react._count)
-    .reduce((a, b) => a + b, 0);
-  const dislikeCount = reaction
-    .filter((react) => react.reaction === 'DISLIKE')
-    .map((react) => react._count)
-    .reduce((a, b) => a + b, 0);
+  // const likeCount = reaction
+  //   .filter((react) => react.reaction === 'LIKE')
+  //   .map((react) => react._count)
+  //   .reduce((a, b) => a + b, 0);
+  // const dislikeCount = reaction
+  //   .filter((react) => react.reaction === 'DISLIKE')
+  //   .map((react) => react._count)
+  //   .reduce((a, b) => a + b, 0);
   return (
     <div>
       <div className="flex items-center">
@@ -82,10 +81,9 @@ export default async function CommentShow({
         <div>
           <CommentReaction
             commentId={commentId}
-            likeCount={likeCount}
-            dislikeCount={dislikeCount}
+            likeCount={0}
+            dislikeCount={0}
             reactToComment={reactToComment}
-            reaction={reaction}
             currentUserReact={currentUserReact}
           />
           <ReplyCreateForm postId={postId} parentId={comment.id} user={user} />
