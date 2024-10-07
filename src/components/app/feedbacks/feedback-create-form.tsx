@@ -17,6 +17,7 @@ import { CirclePlus, FilePenLine } from 'lucide-react';
 import { useFormState } from 'react-dom';
 import type { Tag, Status, Post } from '@prisma/client';
 import { useState } from 'react';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface FeedbackCreateFormProps {
   tagId: string;
@@ -50,6 +51,14 @@ export default function FeedbackCreateForm({
       errors: {},
     }
   );
+
+  const handleOnTagChange = (value: string) => {
+    setTag(value)
+  }
+
+  const handleOnStatusChange = (value: string) => {
+    setStatus(value);
+  }
 
   return (
     <Dialog>
@@ -92,47 +101,62 @@ export default function FeedbackCreateForm({
               {formState.errors._form?.join(', ')}
             </div>
           ) : null}
-          <div className="flex flex-row gap-2 my-2">
-            {tags.map((tag, index) => {
-              return (
-                <Button
-                  type="button"
-                  key={index}
-                  variant={tag.id === selectedTag ? 'default' : 'outline'}
-                  onClick={() => setTag(tag.id)}
-                >
-                  {tag.slug}
-                </Button>
-              );
-            })}
-          </div>
-
-          {post && (
-            <div className="flex flex-row gap-2 my-2">
-              {status.map((st, index) => {
-                return (
-                  <Button
-                    type="button"
-                    key={index}
-                    variant={st.id === selectedStatus ? 'default' : 'outline'}
-                    onClick={() => setStatus(st.id)}
-                  >
-                    {st.description}
-                  </Button>
-                );
-              })}
+          <div className='flex justify-between'>
+            <div>
+              <Select onValueChange={handleOnTagChange} defaultValue={tagId}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select a tag" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Tags</SelectLabel>
+                    {
+                      tags.map((tag) => {
+                        return (
+                          <SelectItem key={tag.id} value={tag.id}>{tag.slug}</SelectItem>
+                        )
+                      })
+                    }
+                  
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
-          )}
+
+            {post && (
+              <div>
+                <Select onValueChange={handleOnStatusChange} defaultValue={statusId}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select a status"/>
+                  </SelectTrigger>
+                  <SelectContent className='mt-5'>
+                    <SelectGroup>
+                      <SelectLabel>Tags</SelectLabel>
+                      {
+                        status.map((st) => {
+                          return (
+                            <SelectItem key={st.id} value={st.id}>{st.description}</SelectItem>
+                          )
+                        })
+                      }
+                    
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
+          
 
           <DialogFooter>
             {post ? (
               <DialogClose asChild>
-                <Button type="submit" variant="default">
+                <Button type="submit" variant="default" className='mt-5'>
                   Save changes
                 </Button>
               </DialogClose>
             ) : (
-              <Button type="submit" variant="default">
+              <Button type="submit" variant="default" className='mt-5'>
                 Submit Post
               </Button>
             )}
