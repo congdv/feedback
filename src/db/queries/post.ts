@@ -5,7 +5,7 @@ import { cache } from 'react';
 export type PostWithTagAndStatus = Post & {
   status: { slug: string; description: string } | null;
   tag: { slug: string; description: string } | null;
-  user: { name: string | null; image: string | null };
+  user: { name: string | null; image: string | null }
 };
 
 type FetchFilter = {
@@ -44,6 +44,11 @@ export const fetchPosts = cache(
             image: true,
           },
         },
+        PostReaction: {
+          select: {
+            userId: true
+          }
+        }
       },
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -82,8 +87,8 @@ export const fetchPostById = cache(
   }
 );
 
-export const getUpvoteCount = (postId: string | null) => {
-  if (postId === null) {
+export const getUpvoteCount = (postId?: string): Promise<number>  => {
+  if (postId === null || postId === undefined) {
     return new Promise((resolve) => resolve(0));
   }
   return DBClient.getInstance().prisma.postReaction.count({
@@ -92,3 +97,18 @@ export const getUpvoteCount = (postId: string | null) => {
     },
   });
 };
+
+export const getUpvoteCountByUserId = (postId?: string, userId?: string): Promise<number> => {
+  if (postId === null || postId === undefined || userId === undefined || userId === null) {
+    return new Promise((resolve) => resolve(0));
+  }
+  return DBClient.getInstance().prisma.postReaction.count({
+    where: {
+      postId: postId,
+      userId: userId
+    },
+  });
+};
+
+
+

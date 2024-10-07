@@ -10,6 +10,7 @@ export default async function Home() {
   const tags = await fetchTags();
   const status = await fetchStatus();
   const session = await auth();
+  if(session)
   return (
     <div className="max-w-5xl py-4 pb-5 mx-auto">
       <div className="flex items-center">

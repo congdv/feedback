@@ -3,6 +3,8 @@
 import { PostWithTagAndStatus } from '@/db/queries/post';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import PostCard from './post-card';
+import { useSession } from 'next-auth/react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface PostListProps {
   selectTag?: string;
@@ -11,14 +13,18 @@ interface PostListProps {
   setPage: Dispatch<SetStateAction<number>>;
 }
 
+type PostDetail = PostWithTagAndStatus & { PostReaction: Array<{userId: string}>};
+
 export default function PostList({
   selectTag,
   selectStatus,
   page,
   setPage,
 }: PostListProps) {
-  const [posts, setPosts] = useState<PostWithTagAndStatus[]>([]);
+  const [posts, setPosts] = useState<PostDetail[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const session = useSession();
+
 
   const fetchPosts = async (scroll = false) => {
     setLoading(true);
@@ -57,6 +63,7 @@ export default function PostList({
       });
       if (response) {
         const data = await response.json();
+
         if (scroll) {
           if (data.posts.length > 0) {
             setPosts((prevPosts) => [...prevPosts, ...data.posts]);
@@ -92,10 +99,25 @@ export default function PostList({
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isLoading]);
 
+  if(session.status === "loading") {
+    return (<div className="mt-10 flex flex-col gap-3">
+      <div>
+        <Skeleton className="h-8 min-w-64 min-h-32" />;
+
+      </div>
+      <div className='mt-2'>
+        <Skeleton className="h-8 min-w-64 min-h-32" />;
+
+      </div>
+
+  </div>)
+  }
+
+
   return (
     <div className="mt-10 flex flex-col gap-3">
       {posts.map((post, index) => (
-        <PostCard post={post} key={index} />
+        <PostCard post={post} key={index} user={session.data?.user}/>
       ))}
     </div>
   );

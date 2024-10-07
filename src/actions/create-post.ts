@@ -132,6 +132,5 @@ export async function updatePost(
       };
     }
   }
-  console.log('Finish update');
   redirect(paths.postShow(tagId, post.id));
 }

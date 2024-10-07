@@ -8,41 +8,81 @@ import {
 import { PostWithTagAndStatus } from '@/db/queries/post';
 import paths from '@/paths';
 import { ChevronUp } from 'lucide-react';
+import { User } from 'next-auth';
 import { useFormatter } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface PostCardProps {
-  post: PostWithTagAndStatus;
+  post: PostWithTagAndStatus & { PostReaction: Array<{userId: string}>};
+  user?: User;
 }
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({ post, user }: PostCardProps) {
   const format = useFormatter();
   const router = useRouter();
+  const [userIds, setUserIds] = useState(new Set(post.PostReaction.map(p => p.userId)))
   const [upvote, setUpvote] = useState<number>(0);
   const dateTime = new Date(post.updatedAt);
   const handleClickPost = (post: PostWithTagAndStatus) => {
     router.push(paths.postShow(post?.tagId ?? '', post.id));
   };
   const navigate = handleClickPost.bind(null, post);
-  const handleClickUpVote = () => {};
+  const handleClickUpVote = async() => {
+    if(user?.id) {
+      await updateUpvote();
+    }
+  };
   const fetchCount = async () => {
     try {
-      const response = await fetch(`/api/post/upvote?postId=${post.id}`, {
+      let url = `/api/post/upvote/${post.id}`;
+
+      if(user?.id) {
+        url += `?userId=${user?.id}`;
+      }
+      const response = await fetch(url, {
         headers: {
           Accept: 'application/json',
-          method: 'GET',
         },
+        method: 'GET',
+
       });
       if (response) {
         const data = await response.json();
-        console.log('🚀 ~ fetchCount ~ data:', data);
         setUpvote(data.count);
+       
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const updateUpvote = async () => {
+    try {
+      const response = await fetch(`/api/post/upvote/${post.id}`, {
+        headers: {
+          Accept: 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({userId: user?.id})
+      });
+      if (response) {
+        const data = await response.json();
+        setUpvote(data.count);
+        if(user?.id) {
+          if(userIds.has(user.id)) {
+            userIds.delete(user.id);
+            setUserIds(new Set(userIds));
+          } else {
+            userIds.add(user.id);
+            setUserIds(new Set(userIds));
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     fetchCount();
   }, [fetchCount]);
@@ -78,11 +118,11 @@ export default function PostCard({ post }: PostCardProps) {
         </CardFooter>
       </div>
       <div
-        className="w-36 flex justify-center items-center flex-col border-l-2"
+        className="min-w-36 flex justify-center items-center flex-col border-l-2"
         onClick={handleClickUpVote}
       >
         <span>
-          <ChevronUp className="h-8 w-8" />
+          <ChevronUp className="h-8 w-8" color={`${userIds.has(user?.id ?? "###") ? "#3730a3" : "#000"}`} />
         </span>
         <span>{upvote}</span>
       </div>
