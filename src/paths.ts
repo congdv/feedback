@@ -13,8 +13,8 @@ const paths = {
     return `/tags/${tagSlug}/posts/new`;
   },
 
-  postShow(tagSlug: string, postId: string) {
-    return `/tags/${tagSlug}/posts/${postId}`;
+  postShow(postId: string) {
+    return `/posts/${postId}`;
   }
 }
 

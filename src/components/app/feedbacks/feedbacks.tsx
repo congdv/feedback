@@ -99,8 +99,6 @@ export default function Feedbacks({ status, tags, user }: FeedbacksProps) {
             <FeedbackCreateForm
               post={null}
               tags={tags}
-              tagId={tags[0]?.id}
-              statusId={status[0]?.id}
               status={status}
             />
           )}

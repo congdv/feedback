@@ -23,8 +23,6 @@ export default async function PostShow({ post, user }: PostShowProps) {
             <FeedbackCreateForm
               post={post}
               tags={tags}
-              statusId={post.statusId ?? ''}
-              tagId={post.tagId ?? ''}
               status={status}
             />
           </div>

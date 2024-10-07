@@ -18,13 +18,17 @@ export default function PostSummary({ post }: PostSummaryProps) {
         <span className="font-medium">Status</span>
       </div>
       <div className="col-span-3">
-        <div className='min-w-[360px] flex justify-start'><TagShow tag={post.status?.description} className='bg-pink-900 text-white'/></div>
+        <div className='min-w-[360px] flex justify-start'>
+          {post.status && <TagShow tag={post.status?.description} className='bg-pink-900 text-white'/>}
+        </div>
       </div>
       <div className="col-span-2">
         <span className="font-medium">Tags</span>
       </div>
       <div className="col-span-3">
-        <div className='min-w-[360px] flex justify-start'><TagShow tag={post.tag?.slug} className='bg-cyan-700 text-white'/></div>
+        <div className='min-w-[360px] flex justify-start'>
+          {post.tag && <TagShow tag={post.tag?.slug} className='bg-cyan-700 text-white'/>}
+        </div>
         
       </div>
       <div className="col-span-2">

@@ -26,7 +26,7 @@ export default function PostCard({ post, user }: PostCardProps) {
   const [upvote, setUpvote] = useState<number>(0);
   const dateTime = new Date(post.updatedAt);
   const handleClickPost = (post: PostWithTagAndStatus) => {
-    router.push(paths.postShow(post?.tagId ?? '', post.id));
+    router.push(paths.postShow(post.id));
   };
   const navigate = handleClickPost.bind(null, post);
   const handleClickUpVote = async() => {
@@ -92,8 +92,8 @@ export default function PostCard({ post, user }: PostCardProps) {
       <div className="grow" onClick={navigate}>
         <CardHeader>
           <div className="flex gap-3">
-            <TagShow tag={post?.tag?.slug} className='bg-cyan-700 text-white'/>
-            <TagShow tag={post?.status?.description} className='bg-pink-900 text-white'/>
+            {post.tag && <TagShow tag={post?.tag?.slug} className='bg-cyan-700 text-white'/>}
+            {post.status && <TagShow tag={post?.status?.description} className='bg-pink-900 text-white'/>}
           </div>
         </CardHeader>
         <CardContent>

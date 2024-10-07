@@ -21,8 +21,8 @@ const createPostSchema = z.object({
 });
 
 export async function createPost(
-  tagId: string,
-  statusId: string,
+  tagId: string | undefined,
+  statusId: string | undefined,
   formState: CreatePostFormState,
   formData: FormData
 ): Promise<CreatePostFormState> {
@@ -73,13 +73,13 @@ export async function createPost(
       };
     }
   }
-  redirect(paths.postShow(tagId, post.id));
+  redirect(paths.postShow(post.id));
 }
 
 export async function updatePost(
-  postId: string,
-  tagId: string,
-  statusId: string,
+  postId: string | undefined,
+  tagId: string | undefined,
+  statusId: string | undefined,
   formState: CreatePostFormState,
   formData: FormData
 ): Promise<CreatePostFormState> {
@@ -132,5 +132,6 @@ export async function updatePost(
       };
     }
   }
-  redirect(paths.postShow(tagId, post.id));
+  console.log('Finish update');
+  redirect(paths.postShow(post.id));
 }

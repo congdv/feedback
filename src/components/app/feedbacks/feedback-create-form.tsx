@@ -20,8 +20,6 @@ import { useState } from 'react';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface FeedbackCreateFormProps {
-  tagId: string;
-  statusId: string;
   tags: Tag[];
   status: Status[];
   post: Post | null;
@@ -29,17 +27,15 @@ interface FeedbackCreateFormProps {
 
 export default function FeedbackCreateForm({
   post,
-  tagId,
-  statusId,
   status,
   tags,
 }: FeedbackCreateFormProps) {
-  const [selectedTag, setTag] = useState<string>(tagId);
-  const [selectedStatus, setStatus] = useState<string>(statusId);
+  const [selectedTag, setTag] = useState<string|undefined>(post?.tagId ?? undefined);
+  const [selectedStatus, setStatus] = useState<string|undefined>(post?.statusId ?? undefined);
   const [title, setTitle] = useState<string>(post?.title ?? '');
   const [content, setContent] = useState<string>(post?.content ?? '');
   const [formState, action] = useFormState(
-    createPost.bind(null, selectedTag, statusId),
+    createPost.bind(null, selectedTag, selectedStatus),
     {
       errors: {},
     }
@@ -103,7 +99,7 @@ export default function FeedbackCreateForm({
           ) : null}
           <div className='flex justify-between'>
             <div>
-              <Select onValueChange={handleOnTagChange} defaultValue={tagId}>
+              <Select onValueChange={handleOnTagChange} defaultValue={selectedTag}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select a tag" />
                 </SelectTrigger>
@@ -125,7 +121,7 @@ export default function FeedbackCreateForm({
 
             {post && (
               <div>
-                <Select onValueChange={handleOnStatusChange} defaultValue={statusId}>
+                <Select onValueChange={handleOnStatusChange} defaultValue={selectedStatus}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a status"/>
                   </SelectTrigger>
