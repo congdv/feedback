@@ -10,12 +10,13 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Clock, Flame, ListFilter, TrendingUp, X } from 'lucide-react';
+import { Clock, Flame, ListFilter, TrendingUp } from 'lucide-react';
 import FeedbackCreateForm from './feedback-create-form';
 import PostList from '../posts/post-list';
 import { User } from 'next-auth';
 import type { Tag, Status } from '@prisma/client';
 import { useState } from 'react';
+import TagShow from '../tag/tag-show';
 
 interface FeedbacksProps {
   status: Status[];
@@ -106,28 +107,17 @@ export default function Feedbacks({ status, tags, user }: FeedbacksProps) {
         </div>
       </div>
       <div className="mt-5 flex flex-row gap-3 items-center">
-        {selectStatus && (
-          <div className="flex flex-row items-center">
-            <span className="p-1 border rounded bg-green-500">
-              {selectStatus.description}
-            </span>{' '}
-            <Button variant={'outline'} onClick={() => setStatus(undefined)}>
-              {' '}
-              <X className="h-4 w-4" />
-            </Button>{' '}
-          </div>
-        )}
         {selectTag && (
           <div className="flex flex-row items-center">
-            <span className="ml-2 p-1 border rounded bg-yellow-200">
-              {selectTag.description}
-            </span>{' '}
-            <Button variant={'outline'} onClick={() => setTag(undefined)}>
-              {' '}
-              <X className="h-4 w-4" />
-            </Button>{' '}
+            <TagShow tag={selectTag.description} className='bg-cyan-700 text-white' close={true} handleClose={() => {setTag(undefined);}}/>
           </div>
         )}
+        {selectStatus && (
+          <div className="flex flex-row items-center">
+            <TagShow tag={selectStatus.description} className='bg-pink-900 text-white' close={true} handleClose={() => {setStatus(undefined);}}/>
+          </div>
+        )}
+        
       </div>
       <PostList
         selectTag={selectTag?.id}

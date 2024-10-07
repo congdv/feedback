@@ -12,6 +12,7 @@ import { User } from 'next-auth';
 import { useFormatter } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import TagShow from '../tag/tag-show';
 
 interface PostCardProps {
   post: PostWithTagAndStatus & { PostReaction: Array<{userId: string}>};
@@ -91,10 +92,8 @@ export default function PostCard({ post, user }: PostCardProps) {
       <div className="grow" onClick={navigate}>
         <CardHeader>
           <div className="flex gap-3">
-            <span className="p-2 border rounded">{post?.tag?.slug}</span>
-            <span className="p-2 border rounded">
-              {post?.status?.description}
-            </span>
+            <TagShow tag={post?.tag?.slug} className='bg-cyan-700 text-white'/>
+            <TagShow tag={post?.status?.description} className='bg-pink-900 text-white'/>
           </div>
         </CardHeader>
         <CardContent>
