@@ -5,7 +5,7 @@ import { Avatar, AvatarImage } from '../ui/avatar';
 import { AvatarFallback } from '@radix-ui/react-avatar';
 
 import * as authAction from '@/actions/auth.action';
-import { LogOut, User } from 'lucide-react';
+import { LogOut, User, User2 } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,11 +13,21 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { Skeleton } from '../ui/skeleton';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import Image from 'next/image';
 
 export default function HeaderAuth() {
   const session = useSession();
 
   let authContent: React.ReactNode;
+
+  const handleGithubLogin = () => {
+    return authAction.signIn();
+  }
+
+  const handleGoogleLogin = () => {
+    return authAction.googleSignIn();
+  }
 
   if (session.status === 'loading') {
     authContent = <Skeleton className="h-8 w-[76px]" />;
@@ -29,7 +39,7 @@ export default function HeaderAuth() {
             <Button variant="ghost" size="icon">
               <Avatar>
                 <AvatarImage src={session.data?.user.image as string} />
-                <AvatarFallback>{session.data.user.name}</AvatarFallback>
+                <AvatarFallback><User2 className='mx-auto my-2'/></AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
@@ -54,11 +64,26 @@ export default function HeaderAuth() {
     );
   } else {
     authContent = (
-      <form action={authAction.signIn}>
-        <Button type="submit" variant="outline">
-          Sign in{' '}
-        </Button>
-      </form>
+      <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Sign in </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle className='text-center text-2xl'>Sign in</DialogTitle>
+        </DialogHeader>
+        <div className="text-center">
+          <Button className='w-full w-[300px]' variant={"outline"} onClick={handleGithubLogin}>
+            <Image src={"/images/github-mark.svg"}  alt={"Github"} width="20" height="20" className='mr-2'/>
+            Github
+          </Button>
+          <Button className='w-full w-[300px] mt-3' variant={"outline"} onClick={handleGoogleLogin}>
+          <Image src={"/images/google.svg"}  alt={"Google"} width="30" height="30" className='mr-2'/>
+            Google
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
     );
   }
 

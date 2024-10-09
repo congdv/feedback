@@ -109,8 +109,26 @@ export default function PostList({
         <Skeleton className="h-8 min-w-64 min-h-32" />;
 
       </div>
+      <div>
+        <Skeleton className="h-8 min-w-64 min-h-32" />;
+
+      </div>
+      <div className='mt-2'>
+        <Skeleton className="h-8 min-w-64 min-h-32" />;
+
+      </div>
+      <div className='mt-2'>
+        <Skeleton className="h-8 min-w-64 min-h-32" />;
+
+      </div>
 
   </div>)
+  } else if(posts.length === 0) {
+    return (
+      <div className='p-10'>
+        <p className='text-xl text-black-400 text-center'>No posts have been added yet.</p>
+      </div>
+    )
   }
 
 
