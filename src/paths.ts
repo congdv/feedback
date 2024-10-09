@@ -5,6 +5,9 @@ const paths = {
   roadmap() {
     return '/roadmap'
   },
+  settings() {
+    return "/settings";
+  },
   topicShow(tagSlug: string) {
     return `/tags/${tagSlug}`;
   },

@@ -5,7 +5,7 @@ import { Avatar, AvatarImage } from '../ui/avatar';
 import { AvatarFallback } from '@radix-ui/react-avatar';
 
 import * as authAction from '@/actions/auth.action';
-import { LogOut, User, User2 } from 'lucide-react';
+import { LogOut, Settings, User2 } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,9 +15,12 @@ import {
 import { Skeleton } from '../ui/skeleton';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import Image from 'next/image';
+import paths from '@/paths';
+import { useRouter } from 'next/navigation';
 
 export default function HeaderAuth() {
   const session = useSession();
+  const router = useRouter();
 
   let authContent: React.ReactNode;
 
@@ -27,6 +30,10 @@ export default function HeaderAuth() {
 
   const handleGoogleLogin = () => {
     return authAction.googleSignIn();
+  }
+
+  const onClickSettings = () => {
+    router.push(paths.settings())
   }
 
   if (session.status === 'loading') {
@@ -45,9 +52,9 @@ export default function HeaderAuth() {
           </DropdownMenuTrigger>
 
           <DropdownMenuContent className="w-30" align="end">
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>My profile</span>
+            <DropdownMenuItem onSelect={onClickSettings}>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={async () => {
