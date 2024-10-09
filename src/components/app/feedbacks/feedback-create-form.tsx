@@ -1,20 +1,17 @@
 'use client';
 
-import { createPost, updatePost } from '@/actions/create-post';
+import { createNewPost, updatePost } from '@/actions/create-post';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { DialogTitle } from '@radix-ui/react-dialog';
-import { CirclePlus, FilePenLine } from 'lucide-react';
-import { useFormState } from 'react-dom';
+import { CirclePlus, FilePenLine, Loader2 } from 'lucide-react';
 import type { Tag, Status, Post } from '@prisma/client';
 import { useState } from 'react';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -25,6 +22,11 @@ interface FeedbackCreateFormProps {
   post: Post | null;
 }
 
+interface ErrorType {
+  title?: string[];
+  content?: string[];
+}
+
 export default function FeedbackCreateForm({
   post,
   status,
@@ -33,20 +35,36 @@ export default function FeedbackCreateForm({
   const [selectedTag, setTag] = useState<string|undefined>(post?.tagId ?? undefined);
   const [selectedStatus, setStatus] = useState<string|undefined>(post?.statusId ?? undefined);
   const [title, setTitle] = useState<string>(post?.title ?? '');
+  const [errors, setErrors] = useState<ErrorType|null>(null);
   const [content, setContent] = useState<string>(post?.content ?? '');
-  const [formState, action] = useFormState(
-    createPost.bind(null, selectedTag, selectedStatus),
-    {
-      errors: {},
-    }
-  );
+  const [loading, setLoading] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
-  const [, updateAction] = useFormState(
-    updatePost.bind(null, post?.id ?? '', selectedTag, selectedStatus),
-    {
-      errors: {},
+
+  const handleSubmitPost = async() => {
+    setLoading(true);
+    const result = await createNewPost(title, content, selectedTag, selectedStatus);
+    setLoading(false);
+    if(result) {
+      setErrors(result.errors);
+      return;
     }
-  );
+
+    setOpen(false);
+  }
+
+  const handleSavePostChange = async() => {
+    setLoading(true);
+    const result = await updatePost(title, content, post?.id, selectedTag, selectedStatus);
+    setLoading(false);
+    if(result) {
+      setErrors(result.errors);
+      return;
+    }
+
+    
+    setOpen(false);
+  }
 
   const handleOnTagChange = (value: string) => {
     setTag(value)
@@ -56,22 +74,29 @@ export default function FeedbackCreateForm({
     setStatus(value);
   }
 
+  const onOpenDialog = () => {
+    setOpen(true);
+    setErrors(null);
+    setLoading(false);
+    setTitle(post?.title ?? "");
+    setContent(post?.content ?? "");
+    setTag(post?.tagId ?? undefined);
+    setStatus(post?.statusId ?? undefined);
+  }
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Dialog open={open} onOpenChange={setOpen} >
         {post ? (
-          <Button variant={'ghost'}>
+          <Button variant={'ghost'} onClick={onOpenDialog}>
             <FilePenLine height="20px" width="20px" />
           </Button>
         ) : (
-          <Button variant="default" className="ml-5">
+          <Button variant="default" onClick={onOpenDialog} className="ml-5">
             <CirclePlus className="mr-2 h-4 w-4" />
             Submit Feedback
           </Button>
         )}
-      </DialogTrigger>
       <DialogContent>
-        <form action={post ? updateAction : action}>
           <DialogHeader>
             <DialogTitle>
               <span className="p-2 border rounded">Feedback</span>
@@ -92,9 +117,14 @@ export default function FeedbackCreateForm({
               placeholder="Post descriptions..."
             />
           </div>
-          {formState.errors._form ? (
+          {errors?.title ? (
             <div className="rounded p-2 bg-red-200 border border-red-400">
-              {formState.errors._form?.join(', ')}
+              {errors.title?.join(', ')}
+            </div>
+          ) : null}
+          {errors?.content ? (
+            <div className="rounded p-2 bg-red-200 border border-red-400">
+              {errors.content?.join(', ')}
             </div>
           ) : null}
           <div className='flex justify-between'>
@@ -146,18 +176,17 @@ export default function FeedbackCreateForm({
 
           <DialogFooter>
             {post ? (
-              <DialogClose asChild>
-                <Button type="submit" variant="default" className='mt-5'>
-                  Save changes
-                </Button>
-              </DialogClose>
+              <Button onClick={handleSavePostChange} variant="default" className='mt-5' disabled={loading} >
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save changes
+              </Button>
             ) : (
-              <Button type="submit" variant="default" className='mt-5'>
+              <Button onClick={handleSubmitPost} variant="default" className='mt-5' disabled={loading} >
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Submit Post
               </Button>
             )}
           </DialogFooter>
-        </form>
       </DialogContent>
     </Dialog>
   );

@@ -20,15 +20,15 @@ const createPostSchema = z.object({
   content: z.string().min(10),
 });
 
-export async function createPost(
+export async function createNewPost(
+  title: string,
+  content: string,
   tagId: string | undefined,
   statusId: string | undefined,
-  formState: CreatePostFormState,
-  formData: FormData
 ): Promise<CreatePostFormState> {
   const result = createPostSchema.safeParse({
-    title: formData.get('title'),
-    content: formData.get('content'),
+    title: title,
+    content: content,
   });
 
   if (!result.success) {
@@ -77,15 +77,15 @@ export async function createPost(
 }
 
 export async function updatePost(
+  title: string,
+  content: string,
   postId: string | undefined,
   tagId: string | undefined,
   statusId: string | undefined,
-  formState: CreatePostFormState,
-  formData: FormData
 ): Promise<CreatePostFormState> {
   const result = createPostSchema.safeParse({
-    title: formData.get('title'),
-    content: formData.get('content'),
+    title: title,
+    content: content,
   });
 
   if (!result.success) {
@@ -132,6 +132,5 @@ export async function updatePost(
       };
     }
   }
-  console.log('Finish update');
   redirect(paths.postShow(post.id));
 }
