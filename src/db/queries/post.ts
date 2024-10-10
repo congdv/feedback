@@ -1,12 +1,17 @@
-import type { Post } from '@prisma/client';
+import type { Post, Status } from '@prisma/client';
 import DBClient from '@/db';
 import { cache } from 'react';
+import { fetchStatus } from './status';
 
 export type PostWithTagAndStatus = Post & {
   status: { slug: string; description: string } | null;
   tag: { slug: string; description: string } | null;
   user: { name: string | null; image: string | null }
 };
+
+export type PostByGroup = Status & {
+  posts: PostWithTagAndStatus[]
+}
 
 type FetchFilter = {
   tag: string | null;
@@ -111,4 +116,16 @@ export const getUpvoteCountByUserId = (postId?: string, userId?: string): Promis
 };
 
 
-
+export const fetchPostsByGroup = async() => {
+  const statusList = await fetchStatus();
+  const res = [];
+  for(const status of statusList) {
+    const st = { ...status} as PostByGroup;
+    const posts = await fetchPosts(1, 20, {status: status.id, tag: null})
+    st.posts = posts;
+    res.push(st);
+  }
+  
+  return res;
+  
+}
