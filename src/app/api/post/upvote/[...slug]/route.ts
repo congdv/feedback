@@ -1,5 +1,5 @@
 import DBClient from '@/db';
-import { getUpvoteCount, getUpvoteCountByUserId } from '@/db/queries/post';
+import { fetchPostById, getUpvoteCount, getUpvoteCountByUserId } from '@/db/queries/post';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -49,8 +49,9 @@ export async function POST(request: NextRequest) {
   
   
   const count = await getUpvoteCount(postId);
+  const post = await fetchPostById(postId);
   return NextResponse.json({
     count: count,
-    byUser: true
+    reaction: post?.PostReaction ?? []
   });
 }

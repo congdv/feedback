@@ -121,7 +121,7 @@ export default function PostCard({ post, user }: PostCardProps) {
         onClick={handleClickUpVote}
       >
         <span>
-          <ChevronUp className="h-8 w-8" color={`${userIds.has(user?.id ?? "###") ? "#3730a3" : "#000"}`} />
+          <ChevronUp className="h-8 w-8" color={`${userIds.has(user?.id ?? "###") ? "#f00" : "#000"}`} />
         </span>
         <span>{upvote}</span>
       </div>

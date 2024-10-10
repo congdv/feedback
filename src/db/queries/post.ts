@@ -9,8 +9,11 @@ export type PostWithTagAndStatus = Post & {
   user: { name: string | null; image: string | null }
 };
 
+export type PostWithTagStatusAndReaction = PostWithTagAndStatus & {
+   PostReaction: Array<{userId: string}>;
+}
 export type PostByGroup = Status & {
-  posts: PostWithTagAndStatus[]
+  posts: PostWithTagStatusAndReaction[]
 }
 
 type FetchFilter = {
@@ -23,7 +26,7 @@ export const fetchPosts = cache(
     page: number,
     pageSize: number,
     filter: FetchFilter
-  ): Promise<PostWithTagAndStatus[]> => {
+  ): Promise<PostWithTagStatusAndReaction[]> => {
     return DBClient.getInstance().prisma.post.findMany({
       where: {
         ...(filter.status && { statusId: filter.status }),
@@ -65,7 +68,7 @@ export const fetchPosts = cache(
 );
 
 export const fetchPostById = cache(
-  (id: string): Promise<PostWithTagAndStatus | null> => {
+  (id: string): Promise<PostWithTagStatusAndReaction | null> => {
     return DBClient.getInstance().prisma.post.findFirst({
       where: { id: id },
       include: {
@@ -87,6 +90,11 @@ export const fetchPostById = cache(
             image: true,
           },
         },
+        PostReaction: {
+          select: {
+            userId: true
+          }
+        }
       },
     });
   }
