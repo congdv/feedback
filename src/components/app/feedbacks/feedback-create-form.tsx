@@ -42,8 +42,9 @@ export default function FeedbackCreateForm({
 
 
   const handleSubmitPost = async() => {
+
     setLoading(true);
-    const result = await createNewPost(title, content, selectedTag, selectedStatus);
+    const result = await createNewPost(title, content, selectedTag, selectedStatus ?? status[0].id);
     setLoading(false);
     if(result) {
       setErrors(result.errors);
@@ -149,8 +150,8 @@ export default function FeedbackCreateForm({
               </Select>
             </div>
 
-            {post && (
-              <div>
+            {(
+              <div className='invisible'>
                 <Select onValueChange={handleOnStatusChange} defaultValue={selectedStatus}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a status"/>
