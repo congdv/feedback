@@ -24,11 +24,14 @@ export default function BoardList({column}: BoardListProps) {
               {...provided.droppableProps}
           >
             <h1 className="p-5 border-b-2 text-2xl text-blue-700">{column.description}</h1>
+            <div className="min-h-full overflow-y-auto">
               {
                 column.posts.map((post, index) => (
                   <BoardTicket key={post.id} index={index} post={post}/>
                 ))
               }
+            </div>
+              
 
           </div>
         ))

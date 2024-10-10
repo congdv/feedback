@@ -21,7 +21,7 @@ export default function BoardTicket({index, post}: BoardTicketProps) {
     <Draggable draggableId="" index={index}>
       {
         () => (
-         <div className="flex flex-row p-2">
+         <div className="flex flex-row p-2 pr-5">
           <Button variant={"ghost"} className="flex flex-col h-[50px] w-[20px]">
             <ChevronUp/>
             <span>2</span>
