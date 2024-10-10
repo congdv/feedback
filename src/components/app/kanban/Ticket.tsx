@@ -18,10 +18,10 @@ export default function BoardTicket({index, post}: BoardTicketProps) {
   };
   const navigate = handleClickPost.bind(null, post);
   return (
-    <Draggable draggableId="" index={index}>
+    <Draggable key={post.id} draggableId={post.id} index={index}>
       {
-        () => (
-         <div className="flex flex-row p-2 pr-5">
+        (provided) => (
+         <div ref={provided.innerRef} className="flex flex-row p-2 pr-5">
           <Button variant={"ghost"} className="flex flex-col h-[50px] w-[20px]">
             <ChevronUp/>
             <span>2</span>
