@@ -8,6 +8,9 @@ const paths = {
   settings() {
     return "/settings";
   },
+  dashboard() {
+    return "/dashboard";
+  },
   topicShow(tagSlug: string) {
     return `/tags/${tagSlug}`;
   },

@@ -15,7 +15,7 @@ interface BoardListProps {
 export default function BoardList({column}: BoardListProps) {
   return (
     <div
-        className='border rounded flex flex-col gap-5 min-h-[500px]'
+        className='border rounded flex flex-col gap-5 min-h-[500px] min-w-[250px] max-w-[250px]'
     >
       <h1 className="p-5 border-b-2 text-2xl text-blue-700">{column.description}</h1>
       <div className="min-h-full ">

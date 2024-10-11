@@ -35,12 +35,16 @@ export default function HeaderAuth() {
   const onClickSettings = () => {
     router.push(paths.settings())
   }
+  const onClickDashboard = () => {
+    router.push(paths.dashboard())
+  }
 
   if (session.status === 'loading') {
     authContent = <Skeleton className="h-8 w-[76px]" />;
   } else if (session.data?.user) {
     authContent = (
-      <>
+      <div className='flex flex-row items-center'>
+        <Button className='mr-5' onClick={onClickDashboard}>Dashboard</Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
@@ -67,30 +71,30 @@ export default function HeaderAuth() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </>
+      </div>
     );
   } else {
     authContent = (
       <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Sign in </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle className='text-center text-2xl'>Sign in</DialogTitle>
-        </DialogHeader>
-        <div className="text-center">
-          <Button className='w-full w-[300px]' variant={"outline"} onClick={handleGithubLogin}>
-            <Image src={"/images/github-mark.svg"}  alt={"Github"} width="20" height="20" className='mr-2'/>
-            Github
-          </Button>
-          <Button className='w-full w-[300px] mt-3' variant={"outline"} onClick={handleGoogleLogin}>
-          <Image src={"/images/google.svg"}  alt={"Google"} width="30" height="30" className='mr-2'/>
-            Google
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline">Sign in </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className='text-center text-2xl'>Sign in</DialogTitle>
+          </DialogHeader>
+          <div className="text-center">
+            <Button className='w-full w-[300px]' variant={"outline"} onClick={handleGithubLogin}>
+              <Image src={"/images/github-mark.svg"}  alt={"Github"} width="20" height="20" className='mr-2'/>
+              Github
+            </Button>
+            <Button className='w-full w-[300px] mt-3' variant={"outline"} onClick={handleGoogleLogin}>
+            <Image src={"/images/google.svg"}  alt={"Google"} width="30" height="30" className='mr-2'/>
+              Google
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     );
   }
 
