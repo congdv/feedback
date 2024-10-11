@@ -1,12 +1,13 @@
 'use client';
 import { Avatar } from '@/components/ui/avatar';
-import { PostWithTagAndStatus } from '@/db/queries/post';
+import { PostWithTagStatusAndReaction } from '@/db/queries/post';
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { useFormatter } from 'next-intl';
 import TagShow from '../tag/tag-show';
+import PostReaction from './post-reaction';
 
 interface PostSummaryProps {
-  post: PostWithTagAndStatus;
+  post: PostWithTagStatusAndReaction;
 }
 
 export default function PostSummary({ post }: PostSummaryProps) {
@@ -14,6 +15,9 @@ export default function PostSummary({ post }: PostSummaryProps) {
 
   return (
     <div className="grid items-center grid-cols-5 p-4 gap-y-4">
+       <div className="col-span-5">
+        <PostReaction post={post} className='min-w-36 flex justify-center items-center flex-col cursor-pointer'/>
+      </div>
       <div className="col-span-2">
         <span className="font-medium">Status</span>
       </div>

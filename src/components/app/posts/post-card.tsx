@@ -7,52 +7,24 @@ import {
 } from '@/components/ui/card';
 import { PostWithTagAndStatus } from '@/db/queries/post';
 import paths from '@/paths';
-import { ChevronUp } from 'lucide-react';
-import { User } from 'next-auth';
 import { useFormatter } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import TagShow from '../tag/tag-show';
+import PostReaction from './post-reaction';
 
 interface PostCardProps {
   post: PostWithTagAndStatus & { postReaction: Array<{userId: string}>};
-  user?: User;
 }
 
-export default function PostCard({ post, user }: PostCardProps) {
+export default function PostCard({ post}: PostCardProps) {
   const format = useFormatter();
   const router = useRouter();
-  const [userIds, setUserIds] = useState(new Set(post.postReaction.map(p => p.userId)))
-  const [upvote, setUpvote] = useState<number>(post.postReaction.length);
   const dateTime = new Date(post.updatedAt);
   const handleClickPost = (post: PostWithTagAndStatus) => {
     router.push(paths.postShow(post.id));
   };
   const navigate = handleClickPost.bind(null, post);
-  const handleClickUpVote = async() => {
-    if(user?.id) {
-      await updateUpvote();
-    }
-  };
 
-  const updateUpvote = async () => {
-    try {
-      const response = await fetch(`/api/post/upvote/${post.id}`, {
-        headers: {
-          Accept: 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({userId: user?.id})
-      });
-      if (response) {
-        const data = await response.json();
-        setUpvote(data.count);
-        setUserIds(new Set(data.reaction.map((p: { userId: string; }) => p.userId)));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   return (
     <Card className="cursor-pointer flex flex-row">
@@ -83,15 +55,7 @@ export default function PostCard({ post, user }: PostCardProps) {
           </p>
         </CardFooter>
       </div>
-      <div
-        className="min-w-36 flex justify-center items-center flex-col border-l-2"
-        onClick={handleClickUpVote}
-      >
-        <span>
-          <ChevronUp className="h-8 w-8" color={`${userIds.has(user?.id ?? "###") ? "#f00" : "#000"}`} />
-        </span>
-        <span>{upvote}</span>
-      </div>
+      <PostReaction className="min-w-36 flex justify-center items-center flex-col border-l-2" post={post}/>
     </Card>
   );
 }

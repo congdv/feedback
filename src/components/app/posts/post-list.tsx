@@ -144,7 +144,7 @@ export default function PostList({
   return (
     <div className="mt-10 flex flex-col gap-3">
       {posts.map((post, index) => (
-        <PostCard post={post} key={index} user={session.data?.user}/>
+        <PostCard post={post} key={index}/>
       ))}
       <div className='flex flex-row justify-center p-2'>
         {isLoadingMore && <LoaderIcon className="animate-spin" />}

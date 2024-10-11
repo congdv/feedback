@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
+
 export default function Settings() {
   const { data: session, status, update } = useSession();
   const [name, setName] = useState(session?.user?.name ?? "");

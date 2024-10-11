@@ -4,6 +4,8 @@ import { fetchPostsByGroup } from "@/db/queries/post";
 import paths from "@/paths";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 export default async function RoadMap() {
 
   const board = await fetchPostsByGroup();

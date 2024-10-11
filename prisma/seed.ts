@@ -6,26 +6,26 @@ async function main() {
     const bug = await prisma.tag.create({
       data: {
         slug: "Bug",
-        description: "Bug collection"
+        description: "Bug"
       }
     })
     const question = await prisma.tag.create({
       data: {
         slug: "Question",
-        description: "Question collection"
+        description: "Question"
       }
     })
     const feature = await prisma.tag.create({
       data: {
         slug: "Feature",
-        description: "Feature collection"
+        description: "Feature"
       }
     })
   
     const improvement = await prisma.tag.create({
       data: {
         slug: "Improvement",
-        description: "Improvement collection"
+        description: "Improvement"
       }
     })
 
