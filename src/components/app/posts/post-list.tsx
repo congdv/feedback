@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import PostCard from './post-card';
 import { useSession } from 'next-auth/react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { LoaderIcon } from 'lucide-react';
 
 interface PostListProps {
   selectTag?: string;
@@ -13,7 +14,7 @@ interface PostListProps {
   setPage: Dispatch<SetStateAction<number>>;
 }
 
-type PostDetail = PostWithTagAndStatus & { PostReaction: Array<{userId: string}>};
+type PostDetail = PostWithTagAndStatus & { postReaction: Array<{userId: string}>};
 
 export default function PostList({
   selectTag,
@@ -23,15 +24,20 @@ export default function PostList({
 }: PostListProps) {
   const [posts, setPosts] = useState<PostDetail[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isLoadingMore, setLoadingMore] = useState<boolean>(false);
   const session = useSession();
 
   const fetchPosts = async (scroll = false) => {
-    setLoading(true);
+    if(scroll) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
+    }
     const searchParams: URLSearchParams = new URLSearchParams();
     const params = [
       {
         key: 'page',
-        value: String(page),
+        value: String(scroll ? page + 1 : page),
       },
       {
         key: 'pageSize',
@@ -75,7 +81,11 @@ export default function PostList({
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      if(scroll) {
+        setLoadingMore(false);
+      } else {
+        setLoading(false);
+      }
     }
   };
   useEffect(() => {
@@ -86,7 +96,7 @@ export default function PostList({
     if (
       window.innerHeight + document.documentElement.scrollTop !==
         document.documentElement.offsetHeight ||
-      isLoading
+      isLoading || isLoadingMore
     ) {
       return;
     }
@@ -136,6 +146,10 @@ export default function PostList({
       {posts.map((post, index) => (
         <PostCard post={post} key={index} user={session.data?.user}/>
       ))}
+      <div className='flex flex-row justify-center p-2'>
+        {isLoadingMore && <LoaderIcon className="animate-spin" />}
+
+      </div>
     </div>
   );
 }

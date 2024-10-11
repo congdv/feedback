@@ -52,6 +52,6 @@ export async function POST(request: NextRequest) {
   const post = await fetchPostById(postId);
   return NextResponse.json({
     count: count,
-    reaction: post?.PostReaction ?? []
+    reaction: post?.postReaction ?? []
   });
 }

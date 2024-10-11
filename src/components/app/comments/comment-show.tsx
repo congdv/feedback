@@ -1,13 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
-  countReactionByCommentId,
-  currentUserReactToComment,
   fetchCommentsByPostId,
 } from '@/db/queries/comments';
 import ReplyCreateForm from './reply-create-form';
-import CommentReaction from './comments-reaction';
-import { createReaction } from '@/actions/create-reaction';
-import type { Reaction } from '@prisma/client';
 import { User } from 'next-auth';
 import { getFormatter } from 'next-intl/server';
 
@@ -24,8 +19,6 @@ export default async function CommentShow({
   user,
 }: CommentShowProps) {
   const comments = await fetchCommentsByPostId(postId);
-  const reaction = await countReactionByCommentId(commentId);
-  const currentUserReact = await currentUserReactToComment(commentId);
   const comment = comments.find((c) => c.id === commentId);
   const format = await getFormatter();
 
@@ -33,10 +26,6 @@ export default async function CommentShow({
     return null;
   }
 
-  const reactToComment = async (commentId: string, type: Reaction) => {
-    'use server';
-    await createReaction(commentId, type);
-  };
   const children = comments.filter((c) => c.parentId === commentId);
   const renderedChildren = children.map((child) => {
     return (
@@ -52,14 +41,6 @@ export default async function CommentShow({
 
   const dateTime = new Date(comment.updatedAt);
 
-  const likeCount = reaction
-    .filter((react) => react.reaction === 'LIKE')
-    .map((react) => react._count)
-    .reduce((a, b) => a + b, 0);
-  const dislikeCount = reaction
-    .filter((react) => react.reaction === 'DISLIKE')
-    .map((react) => react._count)
-    .reduce((a, b) => a + b, 0);
   return (
     <div>
       <div className="flex items-center">
@@ -79,17 +60,8 @@ export default async function CommentShow({
       </div>
       <div className="p-5 pl-12">
         <p>{comment.content}</p>
-        <div>
-          <CommentReaction
-            commentId={commentId}
-            likeCount={likeCount}
-            dislikeCount={dislikeCount}
-            reactToComment={reactToComment}
-            currentUserReact={currentUserReact}
-          />
-          <ReplyCreateForm postId={postId} parentId={comment.id} user={user} />
+          <ReplyCreateForm postId={postId} currentComment={comment} parentId={comment.id} user={user} />
           <div className="pl-4">{renderedChildren}</div>
-        </div>
       </div>
     </div>
   );

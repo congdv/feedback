@@ -61,17 +61,6 @@ export async function createComment(
     }
   }
 
-  const tag = await DBClient.getInstance().prisma.tag.findFirst({
-    where: { posts: { some: { id: postId } } },
-  });
-
-  if (!tag) {
-    return {
-      errors: {
-        _form: ["Failed to revalidate topic"],
-      },
-    };
-  }
 
   revalidatePath(paths.postShow(postId));
   return {

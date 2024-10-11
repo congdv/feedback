@@ -14,8 +14,8 @@ interface BoardTicketProps {
 export default function BoardTicket({post}: BoardTicketProps) {
   const { data: session } = useSession();
   const router = useRouter();
-  const [upvotes, setUpvotes] = useState<number>(post.PostReaction.length);
-  const [reactionUsers, setReactionUsers] = useState(new Set(post.PostReaction.map(p => p.userId)));
+  const [upvotes, setUpvotes] = useState<number>(post.postReaction.length);
+  const [reactionUsers, setReactionUsers] = useState(new Set(post.postReaction.map(p => p.userId)));
   const handleClickPost = (post: PostWithTagAndStatus) => {
     router.push(paths.postShow(post.id));
   };

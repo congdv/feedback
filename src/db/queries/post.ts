@@ -10,7 +10,7 @@ export type PostWithTagAndStatus = Post & {
 };
 
 export type PostWithTagStatusAndReaction = PostWithTagAndStatus & {
-   PostReaction: Array<{userId: string}>;
+   postReaction: Array<{userId: string}>;
 }
 export type PostByGroup = Status & {
   posts: PostWithTagStatusAndReaction[]
@@ -52,7 +52,7 @@ export const fetchPosts = cache(
             image: true,
           },
         },
-        PostReaction: {
+        postReaction: {
           select: {
             userId: true
           }
@@ -90,7 +90,7 @@ export const fetchPostById = cache(
             image: true,
           },
         },
-        PostReaction: {
+        postReaction: {
           select: {
             userId: true
           }

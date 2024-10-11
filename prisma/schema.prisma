@@ -35,18 +35,17 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  post          Post[]
-  comment       Comment[]
-  reactions     CommentReaction[]
-
-  PostReaction PostReaction[]
+  id                  String    @id @default(cuid())
+  name                String?
+  email               String?   @unique
+  emailVerified       DateTime?
+  image               String?
+  accounts            Account[]
+  sessions            Session[]
+  post                Post[]
+  comment             Comment[]
+  commentReaction     CommentReaction[]
+  postReaction        PostReaction[]
 }
 
 model VerificationToken {
@@ -78,31 +77,31 @@ model Tag {
 }
 
 model Post {
-  id       String @id @default(cuid())
-  title    String
-  content  String
-  userId   String
-  tagId    String?
-  statusId String?
+  id             String @id @default(cuid())
+  title          String
+  content        String
+  userId         String
+  tagId          String?
+  statusId       String?
+  comments       Comment[]
+  postReaction   PostReaction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tag      Tag?     @relation(fields: [tagId], references: [id])
-  status   Status?     @relation(fields: [statusId], references: [id])
-  comments Comment[]
-
-  PostReaction PostReaction[]
+  tag      Tag?      @relation(fields: [tagId], references: [id])
+  status   Status?   @relation(fields: [statusId], references: [id])
+  
 }
 
 model Comment {
-  id       String  @id @default(cuid())
-  content  String
-  postId   String
-  userId   String
-  parentId String?
-  reactions  CommentReaction[]
+  id               String  @id @default(cuid())
+  content          String
+  postId           String
+  userId           String
+  parentId         String?
+  commentReaction  CommentReaction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -118,7 +117,7 @@ model CommentReaction {
   id           String @id @default(cuid())
   userId       String
   commentId    String
-  reaction     Reaction
+  upvoteAt DateTime @default(now())
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -129,10 +128,6 @@ model CommentReaction {
   @@unique([userId, commentId])
 }
 
-enum Reaction {
-  LIKE
-  DISLIKE
-}
 
 model PostReaction {
   id       String @id @default(cuid())

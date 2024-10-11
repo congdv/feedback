@@ -15,15 +15,15 @@ import { useState } from 'react';
 import TagShow from '../tag/tag-show';
 
 interface PostCardProps {
-  post: PostWithTagAndStatus & { PostReaction: Array<{userId: string}>};
+  post: PostWithTagAndStatus & { postReaction: Array<{userId: string}>};
   user?: User;
 }
 
 export default function PostCard({ post, user }: PostCardProps) {
   const format = useFormatter();
   const router = useRouter();
-  const [userIds, setUserIds] = useState(new Set(post.PostReaction.map(p => p.userId)))
-  const [upvote, setUpvote] = useState<number>(post.PostReaction.length);
+  const [userIds, setUserIds] = useState(new Set(post.postReaction.map(p => p.userId)))
+  const [upvote, setUpvote] = useState<number>(post.postReaction.length);
   const dateTime = new Date(post.updatedAt);
   const handleClickPost = (post: PostWithTagAndStatus) => {
     router.push(paths.postShow(post.id));
