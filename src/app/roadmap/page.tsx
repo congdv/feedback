@@ -19,7 +19,12 @@ export default async function RoadMap() {
           </Button>
         </div>
         <div className="p-10">
-          <Board board={board}/>
+          {
+            board.length > 0 ? <Board board={board}/> : 
+            <div className='p-10'>
+              <p className='text-xl text-black-400 text-center'>No posts have been added yet.</p>
+            </div>
+          }
         </div>
 
       </div>

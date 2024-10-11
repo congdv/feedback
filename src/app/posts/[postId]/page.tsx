@@ -28,7 +28,10 @@ export default async function PostShowPage({ params }: PostShowPageProps) {
       <div className="flex flex-col md:flex-row h-full">
         <div className="w-full md:w-8/12 p-[18px]">
           <PostShow post={post} user={session?.user} />
-          {session?.user?.id && <CommentCreateForm postId={post.id} />}
+          {session?.user?.id ? 
+            <CommentCreateForm postId={post.id} /> : 
+            <div className='py-5 pl-2 text-red-500 border rounded mb-5'>Sign in to comment</div>
+          }
           <CommentList postId={post.id} user={session?.user} />
         </div>
         <div className="md:w-4/12 p-[18px]  border-l border-b">
