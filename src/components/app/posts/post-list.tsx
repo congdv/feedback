@@ -24,6 +24,7 @@ export default function PostList({
   const [posts, setPosts] = useState<PostDetail[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
   const session = useSession();
+  console.log("session ", session)
 
 
   const fetchPosts = async (scroll = false) => {
@@ -99,7 +100,7 @@ export default function PostList({
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isLoading]);
 
-  if(session.status === "loading") {
+  if(session.status === "loading" || isLoading) {
     return (<div className="mt-10 flex flex-col gap-3">
       <div>
         <Skeleton className="h-8 min-w-64 min-h-32" />;
@@ -123,7 +124,7 @@ export default function PostList({
       </div>
 
   </div>)
-  } else if(posts.length === 0) {
+  } else if(posts.length === 0 && isLoading === false) {
     return (
       <div className='p-10'>
         <p className='text-xl text-black-400 text-center'>No posts have been added yet.</p>
