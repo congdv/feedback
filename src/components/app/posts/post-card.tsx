@@ -11,7 +11,7 @@ import { ChevronUp } from 'lucide-react';
 import { User } from 'next-auth';
 import { useFormatter } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import TagShow from '../tag/tag-show';
 
 interface PostCardProps {
@@ -23,7 +23,7 @@ export default function PostCard({ post, user }: PostCardProps) {
   const format = useFormatter();
   const router = useRouter();
   const [userIds, setUserIds] = useState(new Set(post.PostReaction.map(p => p.userId)))
-  const [upvote, setUpvote] = useState<number>(0);
+  const [upvote, setUpvote] = useState<number>(post.PostReaction.length);
   const dateTime = new Date(post.updatedAt);
   const handleClickPost = (post: PostWithTagAndStatus) => {
     router.push(paths.postShow(post.id));
@@ -32,29 +32,6 @@ export default function PostCard({ post, user }: PostCardProps) {
   const handleClickUpVote = async() => {
     if(user?.id) {
       await updateUpvote();
-    }
-  };
-  const fetchCount = async () => {
-    try {
-      let url = `/api/post/upvote/${post.id}`;
-
-      if(user?.id) {
-        url += `?userId=${user?.id}`;
-      }
-      const response = await fetch(url, {
-        headers: {
-          Accept: 'application/json',
-        },
-        method: 'GET',
-
-      });
-      if (response) {
-        const data = await response.json();
-        setUpvote(data.count);
-       
-      }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -70,23 +47,13 @@ export default function PostCard({ post, user }: PostCardProps) {
       if (response) {
         const data = await response.json();
         setUpvote(data.count);
-        if(user?.id) {
-          if(userIds.has(user.id)) {
-            userIds.delete(user.id);
-            setUserIds(new Set(userIds));
-          } else {
-            userIds.add(user.id);
-            setUserIds(new Set(userIds));
-          }
-        }
+        setUserIds(new Set(data.reaction.map((p: { userId: string; }) => p.userId)));
       }
     } catch (error) {
       console.log(error);
     }
   }
-  useEffect(() => {
-    fetchCount();
-  }, [fetchCount]);
+
   return (
     <Card className="cursor-pointer flex flex-row">
       <div className="grow" onClick={navigate}>

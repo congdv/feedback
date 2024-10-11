@@ -150,8 +150,7 @@ export default function FeedbackCreateForm({
               </Select>
             </div>
 
-            {(
-              <div className='invisible'>
+             { post && <div>
                 <Select onValueChange={handleOnStatusChange} defaultValue={selectedStatus}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a status"/>
@@ -170,8 +169,7 @@ export default function FeedbackCreateForm({
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-              </div>
-            )}
+              </div>}
           </div>
           
 

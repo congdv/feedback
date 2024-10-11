@@ -59,7 +59,7 @@ export default function HeaderAuth() {
             <DropdownMenuItem
               onSelect={async () => {
                 await authAction.signOut();
-                await nextAuthSignOut({ redirect: false });
+                await nextAuthSignOut({ redirect: true, callbackUrl: paths.home() });
               }}
             >
               <LogOut className="mr-2 h-4 w-4" />

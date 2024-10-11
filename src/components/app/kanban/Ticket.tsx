@@ -1,5 +1,4 @@
 "use client"
-import { Draggable } from "@hello-pangea/dnd";
 import { PostWithTagAndStatus, PostWithTagStatusAndReaction } from "@/db/queries/post";
 import { Button } from "@/components/ui/button";
 import { ChevronUp } from "lucide-react";
@@ -10,10 +9,9 @@ import { useSession } from "next-auth/react";
 
 interface BoardTicketProps {
   post: PostWithTagStatusAndReaction
-  index: number;
 }
 
-export default function BoardTicket({index, post}: BoardTicketProps) {
+export default function BoardTicket({post}: BoardTicketProps) {
   const { data: session } = useSession();
   const router = useRouter();
   const [upvotes, setUpvotes] = useState<number>(post.PostReaction.length);
@@ -24,6 +22,9 @@ export default function BoardTicket({index, post}: BoardTicketProps) {
   const navigate = handleClickPost.bind(null, post);
 
   const handleUpvote = async () => {
+    if(!session?.user?.id) {
+      return;
+    }
     try {
       const response = await fetch(`/api/post/upvote/${post.id}`, {
         headers: {
@@ -42,21 +43,15 @@ export default function BoardTicket({index, post}: BoardTicketProps) {
     }
   }
   return (
-    <Draggable key={post.id} draggableId={post.id} index={index}>
-      {
-        (provided) => (
-         <div ref={provided.innerRef} className="flex flex-row p-2 pr-5">
-          <Button variant={"ghost"} className="flex flex-col h-[50px] w-[20px]" onClick={handleUpvote}>
-            <ChevronUp color={`${reactionUsers.has(session?.user?.id ?? "###") ? "#f00" : "#000"}`}/>
-            <span>{upvotes}</span>
-          </Button>
-          <div className=" ml-2 min-w-32 max-w-32">
-            <a className="text-lg font-bold text-gray-400 text-ellipsis break-words cursor-pointer hover:underline" onClick={navigate}>{post.title}</a>
-            <p className="text-sm">{post.content}</p>
-          </div>
-         </div>
-        )
-      }
-    </Draggable>
+    <div className="flex flex-row p-2 pr-5">
+      <Button variant={"ghost"} className="flex flex-col h-[50px] w-[20px]" onClick={handleUpvote}>
+        <ChevronUp color={`${reactionUsers.has(session?.user?.id ?? "###") ? "#f00" : "#000"}`}/>
+        <span>{upvotes}</span>
+      </Button>
+      <div className=" ml-2 min-w-32 max-w-32">
+        <a className="text-lg font-bold text-gray-400 text-ellipsis break-words cursor-pointer hover:underline" onClick={navigate}>{post.title}</a>
+        <p className="text-sm">{post.content}</p>
+      </div>
+    </div>
   )
 }

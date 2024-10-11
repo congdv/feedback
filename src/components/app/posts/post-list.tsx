@@ -24,8 +24,6 @@ export default function PostList({
   const [posts, setPosts] = useState<PostDetail[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
   const session = useSession();
-  console.log("session ", session)
-
 
   const fetchPosts = async (scroll = false) => {
     setLoading(true);
