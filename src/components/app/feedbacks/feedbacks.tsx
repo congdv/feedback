@@ -10,13 +10,13 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Clock, Flame, ListFilter, TrendingUp } from 'lucide-react';
-import FeedbackCreateForm from './feedback-create-form';
-import PostList from '../posts/post-list';
+import { CirclePlus, Clock, Flame, ListFilter, TrendingUp } from 'lucide-react';
+import PostList from '../../posts/post-list';
 import { User } from 'next-auth';
 import type { Tag, Status } from '@prisma/client';
 import { useState } from 'react';
 import TagShow from '../tag/tag-show';
+import { PostButton } from '@/components/posts/post-button';
 
 interface FeedbacksProps {
   status: Status[];
@@ -96,26 +96,40 @@ export default function Feedbacks({ status, tags, user }: FeedbacksProps) {
             </DropdownMenuContent>
           </DropdownMenu>
           {user?.id && (
-            <FeedbackCreateForm
-              post={null}
-              tags={tags}
-              status={status}
-            />
+            <PostButton asChild>
+              <Button>
+                <CirclePlus className="mr-2 h-4 w-4" />
+                Submit new feedback
+              </Button>
+            </PostButton>
           )}
         </div>
       </div>
       <div className="mt-5 flex flex-row gap-3 items-center">
         {selectTag && (
           <div className="flex flex-row items-center">
-            <TagShow tag={selectTag.description} className='bg-cyan-700 text-white' close={true} handleClose={() => {setTag(undefined);}}/>
+            <TagShow
+              tag={selectTag.description}
+              className="bg-cyan-700 text-white"
+              close={true}
+              handleClose={() => {
+                setTag(undefined);
+              }}
+            />
           </div>
         )}
         {selectStatus && (
           <div className="flex flex-row items-center">
-            <TagShow tag={selectStatus.description} className='bg-pink-900 text-white' close={true} handleClose={() => {setStatus(undefined);}}/>
+            <TagShow
+              tag={selectStatus.description}
+              className="bg-pink-900 text-white"
+              close={true}
+              handleClose={() => {
+                setStatus(undefined);
+              }}
+            />
           </div>
         )}
-        
       </div>
       <PostList
         selectTag={selectTag?.id}

@@ -1,6 +1,6 @@
 import type { Post } from '@prisma/client';
 import { User } from 'next-auth';
-import FeedbackCreateForm from '../feedbacks/feedback-create-form';
+import FeedbackCreateForm from '../app/feedbacks/feedback-create-form';
 import { fetchTags } from '@/db/queries/tag';
 import { fetchStatus } from '@/db/queries/status';
 interface PostShowProps {
@@ -20,11 +20,7 @@ export default async function PostShow({ post, user }: PostShowProps) {
         </div>
         {user && user.id === post.userId && (
           <div className="flex justify-end">
-            <FeedbackCreateForm
-              post={post}
-              tags={tags}
-              status={status}
-            />
+            <FeedbackCreateForm post={post} tags={tags} status={status} />
           </div>
         )}
       </div>

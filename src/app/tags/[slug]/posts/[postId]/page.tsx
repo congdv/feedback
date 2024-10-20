@@ -1,8 +1,8 @@
 import { auth } from '@/auth';
 import CommentCreateForm from '@/components/app/comments/comment-create-form';
 import CommentList from '@/components/app/comments/comment-list';
-import PostShow from '@/components/app/posts/post-show';
-import PostSummary from '@/components/app/posts/post-summary';
+import PostShow from '@/components/posts/post-show';
+import PostSummary from '@/components/posts/post-summary';
 import { fetchPostById } from '@/db/queries/post';
 import { notFound } from 'next/navigation';
 

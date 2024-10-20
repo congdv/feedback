@@ -1,9 +1,9 @@
-"use server"
-import { auth } from "@/auth";
-import DBClient from "@/db";
-import paths from "@/paths";
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
+'use server';
+import { auth } from '@/auth';
+import DBClient from '@/db';
+import paths from '@/paths';
+import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 
 const createCommentSchema = z.object({
   content: z.string().min(3),
@@ -19,20 +19,24 @@ interface CreateCommentFormState {
 
 export async function createComment(
   { postId, parentId }: { postId: string; parentId?: string },
-  formState:CreateCommentFormState, formData: FormData):Promise<CreateCommentFormState>  {
-  const result = createCommentSchema.safeParse({content: formData.get("content")});
+  formState: CreateCommentFormState,
+  formData: FormData
+): Promise<CreateCommentFormState> {
+  const result = createCommentSchema.safeParse({
+    content: formData.get('content'),
+  });
 
-  if(!result.success) {
+  if (!result.success) {
     return {
-      errors: result.error.flatten().fieldErrors
-    }
+      errors: result.error.flatten().fieldErrors,
+    };
   }
 
   const session = await auth();
   if (!session || !session.user) {
     return {
       errors: {
-        _form: ["You must sign in to do this."],
+        _form: ['You must sign in to do this.'],
       },
     };
   }
@@ -55,12 +59,11 @@ export async function createComment(
     } else {
       return {
         errors: {
-          _form: ["Something went wrong..."],
+          _form: ['Something went wrong...'],
         },
       };
     }
   }
-
 
   revalidatePath(paths.postShow(postId));
   return {

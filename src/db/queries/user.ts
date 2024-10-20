@@ -1,9 +1,20 @@
-import { cache } from "react";
-import DBClient from "..";
-import { User } from "next-auth";
+import { cache } from 'react';
+import DBClient from '..';
+import { User } from 'next-auth';
 
-export const fetchUserById = cache((id: string): Promise<User|null> => {
+export const fetchUserById = cache((id: string): Promise<User | null> => {
   return DBClient.getInstance().prisma.user.findFirst({
-      where: { id: id}
+    where: { id: id },
+  });
+});
+
+export const getUserById = async (id: string) => {
+  try {
+    const user = await DBClient.getInstance().prisma.user.findUnique({
+      where: { id },
     });
-})
+    return user;
+  } catch {
+    return null;
+  }
+};

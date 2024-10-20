@@ -9,14 +9,14 @@ import { PostWithTagAndStatus } from '@/db/queries/post';
 import paths from '@/paths';
 import { useFormatter } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import TagShow from '../tag/tag-show';
+import TagShow from '../app/tag/tag-show';
 import PostReaction from './post-reaction';
 
 interface PostCardProps {
-  post: PostWithTagAndStatus & { postReaction: Array<{userId: string}>};
+  post: PostWithTagAndStatus & { postReaction: Array<{ userId: string }> };
 }
 
-export default function PostCard({ post}: PostCardProps) {
+export default function PostCard({ post }: PostCardProps) {
   const format = useFormatter();
   const router = useRouter();
   const dateTime = new Date(post.updatedAt);
@@ -25,14 +25,23 @@ export default function PostCard({ post}: PostCardProps) {
   };
   const navigate = handleClickPost.bind(null, post);
 
-
   return (
     <Card className="cursor-pointer flex flex-row">
       <div className="grow" onClick={navigate}>
         <CardHeader>
           <div className="flex gap-3">
-            {post.tag && <TagShow tag={post?.tag?.slug} className='bg-cyan-700 text-white'/>}
-            {post.status && <TagShow tag={post?.status?.description} className='bg-pink-900 text-white'/>}
+            {post.tag && (
+              <TagShow
+                tag={post?.tag?.slug}
+                className="bg-cyan-700 text-white"
+              />
+            )}
+            {post.status && (
+              <TagShow
+                tag={post?.status?.description}
+                className="bg-pink-900 text-white"
+              />
+            )}
           </div>
         </CardHeader>
         <CardContent>
@@ -55,7 +64,10 @@ export default function PostCard({ post}: PostCardProps) {
           </p>
         </CardFooter>
       </div>
-      <PostReaction className="min-w-36 flex justify-center items-center flex-col border-l-2" post={post}/>
+      <PostReaction
+        className="min-w-36 flex justify-center items-center flex-col border-l-2"
+        post={post}
+      />
     </Card>
   );
 }

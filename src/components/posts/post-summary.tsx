@@ -3,7 +3,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { PostWithTagStatusAndReaction } from '@/db/queries/post';
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import { useFormatter } from 'next-intl';
-import TagShow from '../tag/tag-show';
+import TagShow from '../app/tag/tag-show';
 import PostReaction from './post-reaction';
 
 interface PostSummaryProps {
@@ -15,25 +15,34 @@ export default function PostSummary({ post }: PostSummaryProps) {
 
   return (
     <div className="grid items-center grid-cols-5 p-4 gap-y-4">
-       <div className="col-span-5">
-        <PostReaction post={post} className='min-w-36 flex justify-center items-center flex-col cursor-pointer'/>
+      <div className="col-span-5">
+        <PostReaction
+          post={post}
+          className="min-w-36 flex justify-center items-center flex-col cursor-pointer"
+        />
       </div>
       <div className="col-span-2">
         <span className="font-medium">Status</span>
       </div>
       <div className="col-span-3">
-        <div className='min-w-[360px] flex justify-start'>
-          {post.status && <TagShow tag={post.status?.description} className='bg-pink-900 text-white'/>}
+        <div className="min-w-[360px] flex justify-start">
+          {post.status && (
+            <TagShow
+              tag={post.status?.description}
+              className="bg-pink-900 text-white"
+            />
+          )}
         </div>
       </div>
       <div className="col-span-2">
         <span className="font-medium">Tags</span>
       </div>
       <div className="col-span-3">
-        <div className='min-w-[360px] flex justify-start'>
-          {post.tag && <TagShow tag={post.tag?.slug} className='bg-cyan-700 text-white'/>}
+        <div className="min-w-[360px] flex justify-start">
+          {post.tag && (
+            <TagShow tag={post.tag?.slug} className="bg-cyan-700 text-white" />
+          )}
         </div>
-        
       </div>
       <div className="col-span-2">
         <span className="font-medium">Date</span>
