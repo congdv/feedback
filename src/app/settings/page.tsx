@@ -15,7 +15,7 @@ export default function Settings() {
   }
 
   const onSaveChange = async () => {
-    const updateSession = await update({ name: name, email: email });
+    await update({ name: name, email: email });
   };
   return (
     <div>
