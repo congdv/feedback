@@ -1,7 +1,9 @@
 'use server';
 import DBClient from '@/db';
 import { currentUser } from '@/lib/auth';
+import paths from '@/paths';
 import { PostSchema } from '@/schemas';
+import { redirect } from 'next/navigation';
 import * as z from 'zod';
 
 export const newPost = async (values: z.infer<typeof PostSchema>) => {
@@ -18,12 +20,12 @@ export const newPost = async (values: z.infer<typeof PostSchema>) => {
     };
   }
 
-  await DBClient.getInstance().prisma.post.create({
+  const savedPost = await DBClient.getInstance().prisma.post.create({
     data: {
       ...values,
       userId: user?.id,
     },
   });
+  redirect(paths.postShow(savedPost.id));
 
-  return { success: 'Created new post!' };
 };

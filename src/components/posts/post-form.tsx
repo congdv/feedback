@@ -49,10 +49,8 @@ export const PostForm = ({ tags, status }: PostFormInterface) => {
       newPost(values)
         .then((data) => {
           if (data?.error) {
+            form.reset();
             setError(data.error);
-          }
-          if (data?.success) {
-            setSuccess(data.success);
           }
         })
         .catch(() => {
@@ -62,7 +60,7 @@ export const PostForm = ({ tags, status }: PostFormInterface) => {
   };
 
   return (
-    <Card className="w-[600px] shadow-md">
+    <Card className="min-w-[400px] shadow-md">
       <CardHeader>
         <p className="text-2xl font-semibold text-center">New Post</p>
       </CardHeader>
