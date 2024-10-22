@@ -11,3 +11,9 @@ export const PostSchema = z.object({
   tagId: z.optional(z.string()),
   statusId: z.optional(z.string()),
 });
+
+export const LoginSchema = z.object({
+  email: z.string().email({
+    message: 'Email is required'
+  })
+})
