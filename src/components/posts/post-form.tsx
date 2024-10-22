@@ -17,46 +17,68 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { useState, useTransition } from 'react';
-import { newPost } from '@/actions/post';
+import { newPost, updatePost } from '@/actions/post';
 import { FormError } from '../form-error';
 import { FormSuccess } from '../form-success';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select';
 import { SelectValue } from '@radix-ui/react-select';
 import type { Tag, Status } from '@prisma/client';
+import { PostWithTagStatusAndReaction } from '@/db/queries/post';
 
 interface PostFormInterface {
   tags?: Tag[];
   status?: Status[];
+  post?: PostWithTagStatusAndReaction;
+  afterSubmit: () => void;
 }
 
-export const PostForm = ({ tags, status }: PostFormInterface) => {
+export const PostForm = ({ tags, status, post, afterSubmit }: PostFormInterface) => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
   const form = useForm<z.infer<typeof PostSchema>>({
     resolver: zodResolver(PostSchema),
     defaultValues: {
-      title: undefined,
-      content: undefined,
-      tagId: undefined,
-      statusId: undefined,
+      postId: post?.id || undefined,
+      title: post?.title || undefined,
+      content: post?.content || undefined,
+      tagId: post?.tagId || undefined,
+      statusId: post?.statusId || undefined,
     },
   });
   const onSubmit = (values: z.infer<typeof PostSchema>) => {
     setError(undefined);
     setSuccess(undefined);
-    startTransition(() => {
-      newPost(values)
-        .then((data) => {
-          if (data?.error) {
-            form.reset();
-            setError(data.error);
-          }
-        })
-        .catch(() => {
-          setError('Something went wrong!');
-        });
-    });
+    if(!post) {
+      startTransition(() => {
+        newPost(values)
+          .then((data) => {
+            if (data?.error) {
+              form.reset();
+              setError(data.error);
+            }
+          })
+          .catch(() => {
+            setError('Something went wrong!');
+          });
+      });
+    } else {
+      startTransition(() => {
+        updatePost(values)
+          .then((data) => {
+            if (data?.error) {
+              form.reset();
+              setError(data.error);
+            }
+            afterSubmit();
+          })
+
+          .catch(() => {
+            setError('Something went wrong!');
+          });
+      });
+    }
+   
   };
 
   return (

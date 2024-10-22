@@ -5,6 +5,9 @@ import { PostForm } from './post-form';
 import type { Tag, Status } from '@prisma/client';
 import { fetchListOfTag } from '@/actions/tag';
 import { fetchListOfStatus } from '@/actions/status';
+import { useParams } from 'next/navigation';
+import { getPostById } from '@/actions/post';
+import { PostWithTagStatusAndReaction } from '@/db/queries/post';
 
 interface PostButtonProps {
   children: React.ReactNode;
@@ -14,6 +17,9 @@ export const PostButton = ({ children, asChild }: PostButtonProps) => {
   const [tags, setTags] = useState<Tag[]>();
   const [status, setStatus] = useState<Status[]>();
   const [isPending, setPending] = useState<boolean>(false);
+  const [post, setPost] = useState<PostWithTagStatusAndReaction |  undefined>();
+  const [open, setOpen] = useState(false);
+  const params = useParams()
 
   const fetchTagList = async () => {
     try {
@@ -31,24 +37,32 @@ export const PostButton = ({ children, asChild }: PostButtonProps) => {
       setStatus([]);
     }
   };
+  const fetchPost = async() => {
+    if(!params.postId) return;
+    try {
+      const response = await getPostById(params.postId as string);
+      setPost(response || undefined);
+    } catch {
+      setPost(undefined);
+    }
+  }
   useEffect(() => {
     setPending(true);
-    fetchTagList()
-      .then(() => {
-        return fetchStatusList();
-      })
-      .finally(() => {
-        setPending(false);
-      });
+    fetchPost()
+    .then(fetchTagList)
+    .then(fetchStatusList)
+    .finally(() => {
+      setPending(false);
+    });
   }, []);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild={asChild} disabled={isPending}>
         {children}
       </DialogTrigger>
       <DialogContent className="p-0 min-w-fit bg-transparent border-none">
-        <PostForm tags={tags} status={status} />
+        <PostForm tags={tags} status={status} post={post} afterSubmit={() => {setOpen(false)}}/>
       </DialogContent>
     </Dialog>
   );

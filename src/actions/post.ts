@@ -1,5 +1,6 @@
 'use server';
 import DBClient from '@/db';
+import { fetchPostById } from '@/db/queries/post';
 import { currentUser } from '@/lib/auth';
 import paths from '@/paths';
 import { PostSchema } from '@/schemas';
@@ -29,3 +30,41 @@ export const newPost = async (values: z.infer<typeof PostSchema>) => {
   redirect(paths.postShow(savedPost.id));
 
 };
+
+export const updatePost = async (values: z.infer<typeof PostSchema>) => {
+  const user = await currentUser();
+  const postId = values.postId;
+
+
+  if (!user || !user.id) {
+    return { error: 'Unauthorized' };
+  }
+  if(!postId) {
+    return { error: "Invalid post id"}
+  }
+  const validatedFields = PostSchema.safeParse(values);
+
+  if (!validatedFields.success) {
+    return {
+      error: 'Invalid fields',
+    };
+  }
+
+  values.postId = undefined;
+
+  await DBClient.getInstance().prisma.post.update({
+    where: {
+      id: postId
+    },
+    data: {
+      ...values,
+      userId: user?.id,
+    },
+  });
+  redirect(paths.postShow(postId));
+
+};
+
+export const getPostById = async(id: string) => {
+  return fetchPostById(id);
+}

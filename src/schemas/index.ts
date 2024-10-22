@@ -1,6 +1,7 @@
 import * as z from 'zod';
 
 export const PostSchema = z.object({
+  postId: z.optional(z.string()),
   title: z.string().min(3, {
     message: 'Minimum of 3 characters required',
   }),
