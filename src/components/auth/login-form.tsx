@@ -9,21 +9,31 @@ import { useState, useTransition } from "react";
 import { FormSuccess } from "../form-success";
 import { FormError } from "../form-error";
 import { Button } from "../ui/button";
+import { signIn } from "next-auth/react";
 
 
 export const LoginForm = () => {
   const [isPending] = useTransition();
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
+  const [showLoginCode, setShowLoginCode] = useState(false);
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: ""
+      email: "",
+      code: ""
     }
   })
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError('');
     setSuccess('');
+    signIn("email", {
+      email: values.email,
+      redirect: false
+    }).then((res) => {
+      console.log(res)
+    })
     console.log(values)
   };
   return (
@@ -47,6 +57,7 @@ export const LoginForm = () => {
               </FormItem>
             )}
           />
+          
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button type="submit" className="w-full" disabled={isPending}>
