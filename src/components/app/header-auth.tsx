@@ -17,8 +17,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import Image from 'next/image';
 import paths from '@/paths';
 import { useRouter } from 'next/navigation';
+import { LoginButton } from '../auth/login-button';
 
 export default function HeaderAuth() {
+
+ 
   const session = useSession();
   const router = useRouter();
 
@@ -75,26 +78,9 @@ export default function HeaderAuth() {
     );
   } else {
     authContent = (
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline">Sign in </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className='text-center text-2xl'>Sign in</DialogTitle>
-          </DialogHeader>
-          <div className="text-center">
-            <Button className='w-full w-[300px]' variant={"outline"} onClick={handleGithubLogin}>
-              <Image src={"/images/github-mark.svg"}  alt={"Github"} width="20" height="20" className='mr-2'/>
-              Github
-            </Button>
-            <Button className='w-full w-[300px] mt-3' variant={"outline"} onClick={handleGoogleLogin}>
-            <Image src={"/images/google.svg"}  alt={"Google"} width="30" height="30" className='mr-2'/>
-              Google
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <LoginButton>
+          <p>Login</p>
+      </LoginButton>
     );
   }
 

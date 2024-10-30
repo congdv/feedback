@@ -13,10 +13,9 @@ import { signIn } from "next-auth/react";
 
 
 export const LoginForm = () => {
-  const [isPending] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
-  const [showLoginCode, setShowLoginCode] = useState(false);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -28,13 +27,19 @@ export const LoginForm = () => {
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError('');
     setSuccess('');
-    signIn("email", {
-      email: values.email,
-      redirect: false
-    }).then((res) => {
-      console.log(res)
+    startTransition(() => {
+      signIn("email", {
+        email: values.email,
+        redirect: false
+      }).then((res) => {
+        if(res?.ok && !res?.error) {
+          form.reset();
+          setSuccess("Email sent - check your inbox!")
+        } else {
+          setError("Error sending email - try again?")
+        }
+      })
     })
-    console.log(values)
   };
   return (
     <CardWrapper headerLabel="Welcome" showSocial>
@@ -57,7 +62,6 @@ export const LoginForm = () => {
               </FormItem>
             )}
           />
-          
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button type="submit" className="w-full" disabled={isPending}>
