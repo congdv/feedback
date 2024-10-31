@@ -13,8 +13,6 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { Skeleton } from '../ui/skeleton';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import Image from 'next/image';
 import paths from '@/paths';
 import { useRouter } from 'next/navigation';
 import { LoginButton } from '../auth/login-button';
@@ -27,13 +25,6 @@ export default function HeaderAuth() {
 
   let authContent: React.ReactNode;
 
-  const handleGithubLogin = () => {
-    return authAction.signIn();
-  }
-
-  const handleGoogleLogin = () => {
-    return authAction.googleSignIn();
-  }
 
   const onClickSettings = () => {
     router.push(paths.settings())
