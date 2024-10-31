@@ -16,6 +16,7 @@ export const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
+  const [isLoading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -27,6 +28,7 @@ export const LoginForm = () => {
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError('');
     setSuccess('');
+    setLoading(true);
     startTransition(() => {
       signIn("email", {
         email: values.email,
@@ -38,7 +40,7 @@ export const LoginForm = () => {
         } else {
           setError("Error sending email - try again?")
         }
-      })
+      }).finally(() => setLoading(false))
     })
   };
   return (
@@ -64,7 +66,7 @@ export const LoginForm = () => {
           />
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type="submit" className="w-full" disabled={isPending}>
+          <Button type="submit" className="w-full" disabled={isPending || isLoading}>
             Submit
           </Button>
         </form>
