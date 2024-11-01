@@ -16,7 +16,6 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
-    "@auth/core": "0.18.1",
     "@auth/prisma-adapter": "1.0.6",
     "@hello-pangea/dnd": "^17.0.0",
     "@hookform/resolvers": "^3.9.0",
@@ -35,7 +34,7 @@
     "dotenv-cli": "^7.4.2",
     "lucide-react": "^0.446.0",
     "next": "^14.2.13",
-    "next-auth": "5.0.0-beta.3",
+    "next-auth": "^5.0.0-beta.25",
     "next-intl": "^3.20.0",
     "nodemailer": "^6.9.16",
     "prisma": "^5.20.0",
