@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { LogoutButton } from './logout-button';
-import { ExitIcon } from '@radix-ui/react-icons';
 import { SettingsButton } from './settings-button';
 import { LogOutIcon, Settings } from 'lucide-react';
 

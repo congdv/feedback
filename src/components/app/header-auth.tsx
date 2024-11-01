@@ -1,17 +1,7 @@
 'use client';
-import { useSession, signOut as nextAuthSignOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { Button } from '../ui/button';
-import { Avatar, AvatarImage } from '../ui/avatar';
-import { AvatarFallback } from '@radix-ui/react-avatar';
 
-import * as authAction from '@/actions/auth.action';
-import { LogOut, Settings, User2 } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
 import { Skeleton } from '../ui/skeleton';
 import paths from '@/paths';
 import { useRouter } from 'next/navigation';
@@ -27,9 +17,6 @@ export default function HeaderAuth() {
   let authContent: React.ReactNode;
 
 
-  const onClickSettings = () => {
-    router.push(paths.settings())
-  }
   const onClickDashboard = () => {
     router.push(paths.dashboard())
   }

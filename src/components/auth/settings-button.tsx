@@ -1,6 +1,5 @@
 'use client';
 
-import { logout } from '@/actions/logout';
 import { useRouter } from 'next/navigation';
 
 interface SettingsButtonProps {

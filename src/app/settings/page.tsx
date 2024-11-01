@@ -2,23 +2,21 @@
 import { FormError } from '@/components/form-error';
 import { FormSuccess } from '@/components/form-success';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { SettingsSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSession } from 'next-auth/react';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from "zod";
 
 export default function Settings() {
   const user = useCurrentUser();
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
+  const [isPending] = useTransition();
+  const [error] = useState<string | undefined>();
+  const [success] = useState<string | undefined>();
 
 
   const form = useForm<z.infer<typeof SettingsSchema>>({
