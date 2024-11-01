@@ -8,7 +8,7 @@ export type CommentWithAuthor = Comment & {
 };
 
 
-export const fetchCommentsByPostId = cache(
+export const fetchCommentsByPostId = 
   (postId: string): Promise<CommentWithAuthor[]> => {
     return DBClient.getInstance().prisma.comment.findMany({
       where: { postId: postId },
@@ -30,5 +30,4 @@ export const fetchCommentsByPostId = cache(
       },
     });
   }
-);
 

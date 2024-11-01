@@ -1,20 +1,8 @@
-import authConfig from '@/auth.config';
-import NextAuth from 'next-auth';
 import { publicRoutes } from './components/routes';
 import paths from './paths';
-import { Adapter } from "next-auth/adapters";
 
-const fakeEmailAdapter: Adapter = {
-  createVerificationToken: () => undefined,
-  useVerificationToken: () => null,
-  getUserByEmail: () => null,
-};
-
-
-const { auth } = NextAuth({...authConfig, adapter: fakeEmailAdapter});
-
-
-
+import { auth } from "@/auth"
+ 
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
@@ -34,7 +22,8 @@ export default auth((req) => {
 
 
   return;
-});
+})
+
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {

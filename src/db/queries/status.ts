@@ -6,8 +6,8 @@ export const fetchStatus = (): Promise<Status[]> => {
   return DBClient.getInstance().prisma.status.findMany({})
 }
 
-export const fetchStatusById = cache((id: string | null): Promise<Status|null> => {
+export const fetchStatusById = (id: string | null): Promise<Status|null> => {
   return DBClient.getInstance().prisma.status.findFirst({
       where: { id: id ?? ""}
     });
-})
+}

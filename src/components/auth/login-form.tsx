@@ -30,7 +30,7 @@ export const LoginForm = () => {
     setSuccess('');
     setLoading(true);
     startTransition(() => {
-      signIn("http-email", {
+      signIn("resend", {
         email: values.email,
         redirect: false
       }).then((res) => {

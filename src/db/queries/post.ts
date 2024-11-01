@@ -21,7 +21,7 @@ type FetchFilter = {
   status: string | null;
 };
 
-export const fetchPosts = cache(
+export const fetchPosts = 
   (
     page: number,
     pageSize: number,
@@ -65,9 +65,8 @@ export const fetchPosts = cache(
       },
     });
   }
-);
 
-export const fetchPostById = cache(
+export const fetchPostById = 
   (id: string): Promise<PostWithTagStatusAndReaction | null> => {
     return DBClient.getInstance().prisma.post.findFirst({
       where: { id: id },
@@ -98,7 +97,6 @@ export const fetchPostById = cache(
       },
     });
   }
-);
 
 export const getUpvoteCount = (postId?: string): Promise<number>  => {
   if (postId === null || postId === undefined) {
