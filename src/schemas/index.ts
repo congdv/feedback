@@ -18,3 +18,8 @@ export const LoginSchema = z.object({
   }),
   code: z.optional(z.string()),
 })
+
+export const SettingsSchema = z.object({
+  name: z.optional(z.string()),
+  email: z.optional(z.string().email()),
+})

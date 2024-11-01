@@ -16,6 +16,7 @@ import { Skeleton } from '../ui/skeleton';
 import paths from '@/paths';
 import { useRouter } from 'next/navigation';
 import { LoginButton } from '../auth/login-button';
+import { UserButton } from '../auth/user-button';
 
 export default function HeaderAuth() {
 
@@ -39,32 +40,7 @@ export default function HeaderAuth() {
     authContent = (
       <div className='flex flex-row items-center'>
         <Button className='mr-5' onClick={onClickDashboard}>Dashboard</Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Avatar>
-                <AvatarImage src={session.data?.user.image as string} />
-                <AvatarFallback><User2 className='mx-auto my-2'/></AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent className="w-30" align="end">
-            <DropdownMenuItem onSelect={onClickSettings}>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onSelect={async () => {
-                await authAction.signOut();
-                await nextAuthSignOut({ redirect: true, callbackUrl: paths.home() });
-              }}
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <UserButton/>
       </div>
     );
   } else {

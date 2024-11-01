@@ -1,54 +1,75 @@
 'use client';
+import { FormError } from '@/components/form-error';
+import { FormSuccess } from '@/components/form-success';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useCurrentUser } from '@/hooks/use-current-user';
+import { SettingsSchema } from '@/schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from "zod";
 
 export default function Settings() {
-  const { data: session, status, update } = useSession();
-  const [name, setName] = useState(session?.user?.name ?? '');
-  const [email, setEmail] = useState(session?.user?.email ?? '');
-  if (status !== 'authenticated') {
-    return null;
-  }
+  const user = useCurrentUser();
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
 
-  const onSaveChange = async () => {
-    await update({ name: name, email: email });
+
+  const form = useForm<z.infer<typeof SettingsSchema>>({
+    resolver: zodResolver(SettingsSchema),
+    defaultValues: {
+      name: user?.name || undefined,
+      email: user?.email || undefined
+    }
+  })
+
+
+  const onSubmit = async () => {
   };
   return (
     <div>
       <div className="max-w-5xl py-4 pb-5 mx-auto">
         <Card>
           <CardTitle>
-            <p className="p-5 text-2xl">Account Settings</p>
+            <p className="text-2xl font-semibold text-center pt-5">Settings</p>
           </CardTitle>
           <CardContent>
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                type="text"
-                id="name"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5 mt-5">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                type="email"
-                id="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+            <Form {...form}>
+              <form className='space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
+                <div className='space-y-4'>
+                  <FormField control={form.control}
+                    name='name'
+                    render={({field}) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder='John Doe' disabled={isPending}/>
+                        </FormControl>
+                      </FormItem>
+                    )}/>
+                  <FormField control={form.control}
+                    name='email'
+                    render={({field}) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder='john@email.com' disabled={isPending} type='email'/>
+                        </FormControl>
+                      </FormItem>
+                    )}/>
+                </div>
+                <FormError message={error} />
+                <FormSuccess message={success} />
+                <Button type="submit">Save</Button>
+              </form>
+            </Form>
           </CardContent>
-          <CardFooter>
-            <Button onClick={onSaveChange}>Save</Button>
-          </CardFooter>
         </Card>
       </div>
     </div>

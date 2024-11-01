@@ -10,7 +10,7 @@ export const sendVerificationRequestEmail= async (params: {
   const { url, email } = params;
   const emailTemplate = MagicLinkEmail({url})
   await resend.emails.send({
-    from: 'Cong Dao <cong@congdv.com>',
+    from: 'Cong Dao <onboarding@resend.dev>',
     to: email,
     subject: 'Welcome to Feedback!',
     react: emailTemplate
