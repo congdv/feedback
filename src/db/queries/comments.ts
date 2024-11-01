@@ -1,5 +1,4 @@
 import type { Comment } from '@prisma/client';
-import { cache } from 'react';
 import DBClient from '..';
 
 export type CommentWithAuthor = Comment & {

@@ -1,6 +1,5 @@
 import type { Status } from "@prisma/client";
 import DBClient from "@/db";
-import { cache } from "react";
 
 export const fetchStatus = (): Promise<Status[]> => {
   return DBClient.getInstance().prisma.status.findMany({})

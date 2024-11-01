@@ -1,6 +1,5 @@
 import type { Tag } from "@prisma/client";
 import DBClient from "@/db";
-import { cache } from "react";
 
 export const fetchTags = ():Promise<Tag[]> => {
   return DBClient.getInstance().prisma.tag.findMany({})

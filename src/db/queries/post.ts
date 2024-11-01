@@ -1,6 +1,5 @@
 import type { Post, Status } from '@prisma/client';
 import DBClient from '@/db';
-import { cache } from 'react';
 import { fetchStatus } from './status';
 
 export type PostWithTagAndStatus = Post & {
