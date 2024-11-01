@@ -1,4 +1,3 @@
-import { cache } from 'react';
 import DBClient from '..';
 import { User } from 'next-auth';
 
