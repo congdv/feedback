@@ -1,4 +1,4 @@
-import { publicRoutes } from './components/routes';
+import { protectedRoutes } from './components/routes';
 import paths from './paths';
 
 import { auth } from "@/auth"
@@ -7,13 +7,13 @@ export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
   const isApiAuthRoute = nextUrl.pathname.startsWith("/api/auth");
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isProtectedRoutes = protectedRoutes.includes(nextUrl.pathname);
 
   if(isApiAuthRoute) {
     return;
   }
 
-  if(!isLoggedIn && !isPublicRoute) {
+  if(!isLoggedIn && isProtectedRoutes) {
 
     return Response.redirect(
       new URL(paths.home(), nextUrl)

@@ -19,12 +19,19 @@ export const {
         session.user.id = token.sub;
       }
 
+      if(session.user) {
+        session.user.name = token.name
+      }
+
+
       return session;
     },
     async jwt({ token }) {
       if (!token.sub) return token;
       const existingUser = await getUserById(token.sub);
+
       if (!existingUser) return token;
+      token.name = existingUser.name;
       return token;
     },
   },
