@@ -7,6 +7,7 @@ import { useFormState } from 'react-dom';
 
 interface CommentCreateFormProps {
   postId: string;
+  organizationSlug: string;
   parentId?: string;
   startOpen?: boolean;
 }
@@ -14,9 +15,10 @@ interface CommentCreateFormProps {
 export default function CommentCreateForm({
   postId,
   parentId,
+  organizationSlug
 }: CommentCreateFormProps) {
   const [formState, action] = useFormState(
-    createComment.bind(null, { postId, parentId }),
+    createComment.bind(null, { postId, parentId, organizationSlug }),
     { errors: {} }
   );
   const ref = useRef<HTMLFormElement | null>(null);

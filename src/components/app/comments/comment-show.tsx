@@ -11,12 +11,14 @@ interface CommentShowProps {
   postId: string;
   reply: boolean;
   user?: User;
+  organizationSlug: string;
 }
 
 export default async function CommentShow({
   commentId,
   postId,
   user,
+  organizationSlug
 }: CommentShowProps) {
   const comments = await fetchCommentsByPostId(postId);
   const comment = comments.find((c) => c.id === commentId);
@@ -35,6 +37,7 @@ export default async function CommentShow({
         postId={postId}
         reply={true}
         user={user}
+        organizationSlug={organizationSlug}
       />
     );
   });
@@ -60,7 +63,7 @@ export default async function CommentShow({
       </div>
       <div className="p-5 pl-12">
         <p>{comment.content}</p>
-          <ReplyCreateForm postId={postId} currentComment={comment} parentId={comment.id} user={user} />
+          <ReplyCreateForm postId={postId} currentComment={comment} parentId={comment.id} user={user} organizationSlug={organizationSlug}/>
           <div className="pl-4">{renderedChildren}</div>
       </div>
     </div>

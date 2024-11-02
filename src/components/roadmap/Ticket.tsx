@@ -8,16 +8,17 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 
 export interface BoardTicketProps {
-  post: PostWithTagStatusAndReaction
+  post: PostWithTagStatusAndReaction;
+  organizationSlug: string;
 }
 
-export default function BoardTicket({post}: BoardTicketProps) {
+export default function BoardTicket({post, organizationSlug}: BoardTicketProps) {
   const { data: session } = useSession();
   const router = useRouter();
   const [upvotes, setUpvotes] = useState<number>(post.postReaction.length);
   const [reactionUsers, setReactionUsers] = useState(new Set(post.postReaction.map(p => p.userId)));
   const handleClickPost = (post: PostWithTagAndStatus) => {
-    router.push(paths.postShow(post.id));
+    router.push(paths.postShow(organizationSlug, post.id));
   };
   const navigate = handleClickPost.bind(null, post);
 

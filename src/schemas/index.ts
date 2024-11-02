@@ -10,6 +10,7 @@ export const PostSchema = z.object({
   }),
   tagId: z.optional(z.string()),
   statusId: z.optional(z.string()),
+  organizationId: z.string()
 });
 
 export const LoginSchema = z.object({
@@ -22,4 +23,10 @@ export const LoginSchema = z.object({
 export const SettingsSchema = z.object({
   name: z.optional(z.string()),
   email: z.optional(z.string().email()),
+})
+
+export const OrganizationSchema = z.object({
+  name: z.string().min(3, {
+    message: 'Minimum of 3 characters required',
+  })
 })

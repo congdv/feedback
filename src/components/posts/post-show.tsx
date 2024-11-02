@@ -6,9 +6,10 @@ import { FilePenLine } from 'lucide-react';
 interface PostShowProps {
   post: Post;
   user?: User;
+  organizationId: string;
 }
 
-export default async function PostShow({ post, user }: PostShowProps) {
+export default async function PostShow({ post, user, organizationId }: PostShowProps) {
 
   return (
     <div className="p-5 mb-10 border rounded">
@@ -17,7 +18,7 @@ export default async function PostShow({ post, user }: PostShowProps) {
           <h1 className="text-lg font-semibold ">{post.title}</h1>
         </div>
         {user && user.id === post.userId && (
-            <PostButton asChild>
+            <PostButton organizationId={organizationId} asChild>
               <Button variant={"ghost"} size={"icon"}>
                 <FilePenLine className="h-4 w-4" />
               </Button>

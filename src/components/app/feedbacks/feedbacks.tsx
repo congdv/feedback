@@ -22,9 +22,11 @@ interface FeedbacksProps {
   status: Status[];
   tags: Tag[];
   user?: User;
+  organizationId: string
+  organizationSlug: string
 }
 
-export default function Feedbacks({ status, tags, user }: FeedbacksProps) {
+export default function Feedbacks({ status, tags, user, organizationId, organizationSlug }: FeedbacksProps) {
   const [selectTag, setTag] = useState<Tag>();
   const [selectStatus, setStatus] = useState<Status>();
   const [page, setPage] = useState<number>(1);
@@ -96,7 +98,7 @@ export default function Feedbacks({ status, tags, user }: FeedbacksProps) {
             </DropdownMenuContent>
           </DropdownMenu>
           {user?.id && (
-            <PostButton asChild>
+            <PostButton organizationId={organizationId} asChild>
               <Button>
                 <CirclePlus className="mr-2 h-4 w-4" />
                 Submit new feedback
@@ -136,6 +138,8 @@ export default function Feedbacks({ status, tags, user }: FeedbacksProps) {
         selectStatus={selectStatus?.id}
         page={page}
         setPage={setPage}
+        organizationId={organizationId}
+        organizationSlug={organizationSlug}
       />
     </>
   );

@@ -12,6 +12,7 @@ import { useFormState } from 'react-dom';
 interface ReplyCreateFormProps {
   postId: string;
   currentComment: CommentWithAuthor;
+  organizationSlug: string;
   parentId?: string;
   startOpen?: boolean;
   user?: User;
@@ -22,6 +23,7 @@ export default function ReplyCreateForm({
   currentComment,
   parentId,
   user,
+  organizationSlug
 }: ReplyCreateFormProps) {
   const { data: session } = useSession();
   const [open, setOpen] = useState<boolean>(false);
@@ -29,7 +31,7 @@ export default function ReplyCreateForm({
   const [reactionUsers, setReactionUsers] = useState(new Set(currentComment.commentReaction.map(p => p.userId)));
   const ref = useRef<HTMLFormElement | null>(null);
   const [formState, action] = useFormState(
-    createComment.bind(null, { postId, parentId }),
+    createComment.bind(null, { postId, parentId, organizationSlug }),
     { errors: {} }
   );
   useEffect(() => {

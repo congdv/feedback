@@ -12,8 +12,9 @@ import { PostWithTagStatusAndReaction } from '@/db/queries/post';
 interface PostButtonProps {
   children: React.ReactNode;
   asChild?: boolean;
+  organizationId: string;
 }
-export const PostButton = ({ children, asChild }: PostButtonProps) => {
+export const PostButton = ({ children, organizationId, asChild }: PostButtonProps) => {
   const [tags, setTags] = useState<Tag[]>();
   const [status, setStatus] = useState<Status[]>();
   const [isPending, setPending] = useState<boolean>(false);
@@ -62,7 +63,7 @@ export const PostButton = ({ children, asChild }: PostButtonProps) => {
         {children}
       </DialogTrigger>
       <DialogContent className="p-0 min-w-fit bg-transparent border-none">
-        <PostForm tags={tags} status={status} post={post} afterSubmit={() => {setOpen(false)}}/>
+        <PostForm tags={tags} status={status} post={post} organizationId={organizationId} afterSubmit={() => {setOpen(false)}}/>
       </DialogContent>
     </Dialog>
   );

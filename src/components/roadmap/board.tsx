@@ -5,7 +5,7 @@ import { PostByGroup } from '@/db/queries/post';
 import { Skeleton } from '../ui/skeleton';
 
 
-export default function Board() {
+export default function Board({organizationSlug}: {organizationSlug: string}) {
   const [isLoading, setLoading] = useState(false);
   const [board, setBoard] = useState<PostByGroup[]>([]);
 
@@ -47,7 +47,7 @@ export default function Board() {
     <div className="flex justify-start gap-5 items-start mt-5 overflow-y-auto">
       {
         board.map((column) => (
-          <BoardList key={column.id}  column={column}/>
+          <BoardList key={column.id}  column={column} organizationSlug={organizationSlug}/>
         ))
       }
     </div>

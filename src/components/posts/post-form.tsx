@@ -29,10 +29,12 @@ interface PostFormInterface {
   tags?: Tag[];
   status?: Status[];
   post?: PostWithTagStatusAndReaction;
+  organizationId: string;
   afterSubmit: () => void;
 }
 
-export const PostForm = ({ tags, status, post, afterSubmit }: PostFormInterface) => {
+export const PostForm = ({ tags, status, post, organizationId, afterSubmit }: PostFormInterface) => {
+  console.log("🚀 ~ PostForm ~ post:", post)
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
@@ -40,13 +42,15 @@ export const PostForm = ({ tags, status, post, afterSubmit }: PostFormInterface)
     resolver: zodResolver(PostSchema),
     defaultValues: {
       postId: post?.id || undefined,
-      title: post?.title || undefined,
-      content: post?.content || undefined,
+      title: post?.title || "",
+      content: post?.content || "",
       tagId: post?.tagId || undefined,
       statusId: post?.statusId || undefined,
+      organizationId: organizationId
     },
   });
   const onSubmit = (values: z.infer<typeof PostSchema>) => {
+    console.log("🚀 ~ onSubmit ~ values:", values)
     setError(undefined);
     setSuccess(undefined);
     if(!post) {

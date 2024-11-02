@@ -1,24 +1,30 @@
-'use client';
+"use client";
 
-import { PostWithTagAndStatus } from '@/db/queries/post';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import PostCard from './post-card';
-import { useSession } from 'next-auth/react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { LoaderIcon } from 'lucide-react';
+import { PostWithTagAndStatus } from "@/db/queries/post";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import PostCard from "./post-card";
+import { useSession } from "next-auth/react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { LoaderIcon } from "lucide-react";
 
 interface PostListProps {
   selectTag?: string;
   selectStatus?: string;
+  organizationId: string;
+  organizationSlug: string;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
 }
 
-type PostDetail = PostWithTagAndStatus & { postReaction: Array<{userId: string}>};
+type PostDetail = PostWithTagAndStatus & {
+  postReaction: Array<{ userId: string }>;
+};
 
 export default function PostList({
   selectTag,
   selectStatus,
+  organizationId,
+  organizationSlug,
   page,
   setPage,
 }: PostListProps) {
@@ -28,7 +34,7 @@ export default function PostList({
   const session = useSession();
 
   const fetchPosts = async (scroll = false) => {
-    if(scroll) {
+    if (scroll) {
       setLoadingMore(true);
     } else {
       setLoading(true);
@@ -36,21 +42,25 @@ export default function PostList({
     const searchParams: URLSearchParams = new URLSearchParams();
     const params = [
       {
-        key: 'page',
+        key: "page",
         value: String(scroll ? page + 1 : page),
       },
       {
-        key: 'pageSize',
-        value: '10',
+        key: "pageSize",
+        value: "10",
       },
       {
-        key: 'selectTag',
+        key: "selectTag",
         value: selectTag,
       },
       {
-        key: 'selectStatus',
+        key: "selectStatus",
         value: selectStatus,
       },
+      {
+        key: "organizationId",
+        value: organizationId
+      }
     ];
 
     params.forEach((item) => {
@@ -62,8 +72,8 @@ export default function PostList({
     try {
       const response = await fetch(`/api/post?${searchParams.toString()}`, {
         headers: {
-          Accept: 'application/json',
-          method: 'GET',
+          Accept: "application/json",
+          method: "GET",
         },
       });
       if (response) {
@@ -81,7 +91,7 @@ export default function PostList({
     } catch (error) {
       console.log(error);
     } finally {
-      if(scroll) {
+      if (scroll) {
         setLoadingMore(false);
       } else {
         setLoading(false);
@@ -96,7 +106,8 @@ export default function PostList({
     if (
       window.innerHeight + document.documentElement.scrollTop !==
         document.documentElement.offsetHeight ||
-      isLoading || isLoadingMore
+      isLoading ||
+      isLoadingMore
     ) {
       return;
     }
@@ -104,51 +115,47 @@ export default function PostList({
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [isLoading]);
 
-  if(session.status === "loading" || isLoading) {
-    return (<div className="mt-10 flex flex-col gap-3">
-      <div>
-        <Skeleton className="h-8 min-w-64 min-h-32" />;
-
-      </div>
-      <div className='mt-2'>
-        <Skeleton className="h-8 min-w-64 min-h-32" />;
-
-      </div>
-      <div>
-        <Skeleton className="h-8 min-w-64 min-h-32" />;
-
-      </div>
-      <div className='mt-2'>
-        <Skeleton className="h-8 min-w-64 min-h-32" />;
-
-      </div>
-      <div className='mt-2'>
-        <Skeleton className="h-8 min-w-64 min-h-32" />;
-
-      </div>
-
-  </div>)
-  } else if(posts.length === 0 && isLoading === false) {
+  if (session.status === "loading" || isLoading) {
     return (
-      <div className='p-10'>
-        <p className='text-xl text-black-400 text-center'>No posts have been added yet.</p>
+      <div className="mt-10 flex flex-col gap-3">
+        <div>
+          <Skeleton className="h-8 min-w-64 min-h-32" />
+        </div>
+        <div className="mt-2">
+          <Skeleton className="h-8 min-w-64 min-h-32" />
+        </div>
+        <div>
+          <Skeleton className="h-8 min-w-64 min-h-32" />
+        </div>
+        <div className="mt-2">
+          <Skeleton className="h-8 min-w-64 min-h-32" />
+        </div>
+        <div className="mt-2">
+          <Skeleton className="h-8 min-w-64 min-h-32" />
+        </div>
       </div>
-    )
+    );
+  } else if (posts.length === 0 && isLoading === false) {
+    return (
+      <div className="p-10">
+        <p className="text-xl text-black-400 text-center">
+          No posts have been added yet.
+        </p>
+      </div>
+    );
   }
-
 
   return (
     <div className="mt-10 flex flex-col gap-3">
       {posts.map((post, index) => (
-        <PostCard post={post} key={index}/>
+        <PostCard post={post} key={index} organizationSlug={organizationSlug}/>
       ))}
-      <div className='flex flex-row justify-center p-2'>
+      <div className="flex flex-row justify-center p-2">
         {isLoadingMore && <LoaderIcon className="animate-spin" />}
-
       </div>
     </div>
   );

@@ -14,14 +14,15 @@ import PostReaction from './post-reaction';
 
 interface PostCardProps {
   post: PostWithTagAndStatus & { postReaction: Array<{ userId: string }> };
+  organizationSlug: string;
 }
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({ post, organizationSlug }: PostCardProps) {
   const format = useFormatter();
   const router = useRouter();
   const dateTime = new Date(post.updatedAt);
   const handleClickPost = (post: PostWithTagAndStatus) => {
-    router.push(paths.postShow(post.id));
+    router.push(paths.postShow(organizationSlug, post.id));
   };
   const navigate = handleClickPost.bind(null, post);
 

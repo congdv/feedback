@@ -46,6 +46,7 @@ model User {
   comment             Comment[]
   commentReaction     CommentReaction[]
   postReaction        PostReaction[]
+  organizations       Organization[]
 }
 
 model VerificationToken {
@@ -85,6 +86,7 @@ model Post {
   statusId       String?
   comments       Comment[]
   postReaction   PostReaction[]
+  organizationId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -92,7 +94,7 @@ model Post {
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   tag      Tag?      @relation(fields: [tagId], references: [id])
   status   Status?   @relation(fields: [statusId], references: [id])
-  
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }
 
 model Comment {
@@ -139,4 +141,18 @@ model PostReaction {
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([postId, userId])
+}
+
+model Organization {
+  id               String @id @default(cuid())
+  slug             String
+  createdByUserId  String
+  posts            Post[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user       User      @relation(fields: [createdByUserId], references: [id], onDelete: Cascade)
+  
+   @@unique([slug])
 }

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { LoginButton } from '../auth/login-button';
 import { UserButton } from '../auth/user-button';
 
-export default function HeaderAuth() {
+export default function HeaderAuth({organizationSlug}: {organizationSlug: string}) {
 
  
   const session = useSession();
@@ -18,7 +18,7 @@ export default function HeaderAuth() {
 
 
   const onClickDashboard = () => {
-    router.push(paths.dashboard())
+    router.push(paths.dashboard(organizationSlug))
   }
 
   if (session.status === 'loading') {

@@ -10,9 +10,10 @@ export interface Ticket {
 
 interface BoardListProps {
   column: PostByGroup;
+  organizationSlug: string;
 }
 
-export default function BoardList({column}: BoardListProps) {
+export default function BoardList({column, organizationSlug}: BoardListProps) {
   return (
     <div
         className='border rounded flex flex-col gap-5 min-h-[500px] min-w-[250px] max-w-[250px]'
@@ -21,7 +22,7 @@ export default function BoardList({column}: BoardListProps) {
       <div className="min-h-full ">
         {
           column.posts.map((post: PostWithTagStatusAndReaction) => (
-            <BoardTicket key={post.id} post={post}/>
+            <BoardTicket key={post.id} post={post} organizationSlug={organizationSlug}/>
           ))
         }
       </div>

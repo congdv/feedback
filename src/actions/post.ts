@@ -21,13 +21,24 @@ export const newPost = async (values: z.infer<typeof PostSchema>) => {
     };
   }
 
+  const existingOrganization = await DBClient.getInstance().prisma.organization.findFirst({
+    where: {
+      id: values.organizationId
+    }
+  })
+  if(!existingOrganization) {
+    return {
+      error: "Current organization is not valid"
+    }
+  }
+
   const savedPost = await DBClient.getInstance().prisma.post.create({
     data: {
       ...values,
       userId: user?.id,
     },
   });
-  redirect(paths.postShow(savedPost.id));
+  redirect(paths.postShow(existingOrganization.slug, savedPost.id));
 
 };
 
@@ -50,6 +61,18 @@ export const updatePost = async (values: z.infer<typeof PostSchema>) => {
     };
   }
 
+  const existingOrganization = await DBClient.getInstance().prisma.organization.findFirst({
+    where: {
+      id: values.organizationId
+    }
+  })
+  if(!existingOrganization) {
+    return {
+      error: "Current organization is not valid"
+    }
+  }
+
+
   values.postId = undefined;
 
   await DBClient.getInstance().prisma.post.update({
@@ -61,7 +84,7 @@ export const updatePost = async (values: z.infer<typeof PostSchema>) => {
       userId: user?.id,
     },
   });
-  redirect(paths.postShow(postId));
+  redirect(paths.postShow(existingOrganization.slug, postId));
 
 };
 

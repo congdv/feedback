@@ -18,7 +18,7 @@ interface CreateCommentFormState {
 }
 
 export async function createComment(
-  { postId, parentId }: { postId: string; parentId?: string },
+  { postId, parentId, organizationSlug }: { postId: string; parentId?: string, organizationSlug: string },
   formState: CreateCommentFormState,
   formData: FormData
 ): Promise<CreateCommentFormState> {
@@ -65,7 +65,7 @@ export async function createComment(
     }
   }
 
-  revalidatePath(paths.postShow(postId));
+  revalidatePath(paths.postShow(organizationSlug, postId));
   return {
     errors: {},
     success: true,

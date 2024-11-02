@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-import Header from "@/components/app/header";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 
@@ -38,7 +37,6 @@ export default async function RootLayout({
       >
         <SessionProvider>
           <NextIntlClientProvider messages={messages}>
-            <Header/>
             {children}
           </NextIntlClientProvider>
         </SessionProvider>

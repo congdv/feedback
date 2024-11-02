@@ -2,14 +2,14 @@ const paths = {
   home() {
     return '/';
   },
-  roadmap() {
-    return '/roadmap'
+  roadmap(slug:string) {
+    return this.organizationShow(slug) + '/roadmap'
   },
-  settings() {
-    return "/settings";
+  settings(slug:string) {
+    return this.organizationShow(slug) +"/settings";
   },
-  dashboard() {
-    return "/dashboard";
+  dashboard(slug:string) {
+    return this.organizationShow(slug) + "/dashboard";
   },
   topicShow(tagSlug: string) {
     return `/tags/${tagSlug}`;
@@ -19,8 +19,11 @@ const paths = {
     return `/tags/${tagSlug}/posts/new`;
   },
 
-  postShow(postId: string) {
-    return `/posts/${postId}`;
+  postShow(organization: string, postId: string) {
+    return `/organization/${organization}/posts/${postId}`;
+  },
+  organizationShow(slug: string) {
+    return `/organization/${slug}`;
   }
 }
 
