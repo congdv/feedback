@@ -1,4 +1,3 @@
-import { Badge } from "../ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 
 const features = [

@@ -1,7 +1,5 @@
 "use client";
-import Link from "next/link";
 import TypewriterComponent from "typewriter-effect";
-import { Button } from "../ui/button";
 import { LoginButton } from "../auth/login-button";
 
 export const LandingHero = () => {

@@ -3,8 +3,6 @@ import { LandingFeature } from "@/components/landing/landing-feature";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingHero } from "@/components/landing/landing-hero";
 import { LandingNavbar } from "@/components/landing/landing-navbar";
-import paths from "@/paths";
-import Link from "next/link";
 
 export default function LandingPage() {
   return(
