@@ -33,7 +33,7 @@ export default function Feedbacks({ status, tags, user, organizationId, organiza
 
   return (
     <>
-      <div className="flex items-center justify-between mt-5">
+      <div className="flex items-center md:justify-between md:flex-row flex-col mt-5">
         <div className="flex flex-row gap-x-2">
           <Button variant="outline" disabled>
             <Flame className="mr-2 h-4 w-4" />
@@ -46,7 +46,7 @@ export default function Feedbacks({ status, tags, user, organizationId, organiza
             <TrendingUp className="mr-2 h-4 w-4" /> Trending
           </Button>
         </div>
-        <div>
+        <div className='mt-5 md:mt-0'>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={'ghost'}>

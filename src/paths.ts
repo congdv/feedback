@@ -1,14 +1,17 @@
 const paths = {
   home() {
-    return '/';
+    return "/";
   },
-  roadmap(slug:string) {
-    return this.organizationShow(slug) + '/roadmap'
+  landingDashboard() {
+    return "/dashboard";
   },
-  settings(slug:string) {
-    return this.organizationShow(slug) +"/settings";
+  roadmap(slug: string) {
+    return this.organizationShow(slug) + "/roadmap";
   },
-  dashboard(slug:string) {
+  settings(slug: string) {
+    return this.organizationShow(slug) + "/settings";
+  },
+  dashboard(slug: string) {
     return this.organizationShow(slug) + "/dashboard";
   },
   topicShow(tagSlug: string) {
@@ -24,7 +27,7 @@ const paths = {
   },
   organizationShow(slug: string) {
     return `/organization/${slug}`;
-  }
-}
+  },
+};
 
 export default paths;
