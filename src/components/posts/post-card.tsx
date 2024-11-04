@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Card,
   CardContent,
@@ -11,6 +10,7 @@ import { useFormatter } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import TagShow from '../app/tag/tag-show';
 import PostReaction from './post-reaction';
+import { UserAvatar } from '../user-avatar';
 
 interface PostCardProps {
   post: PostWithTagAndStatus & { postReaction: Array<{ userId: string }> };
@@ -50,13 +50,7 @@ export default function PostCard({ post, organizationSlug }: PostCardProps) {
           <p>{post.content}</p>
         </CardContent>
         <CardFooter>
-          <Avatar>
-            <AvatarImage
-              src={post.user.image ?? ''}
-              alt={post.user.name ?? 'unknown'}
-            />
-            <AvatarFallback>{post.user.name}</AvatarFallback>
-          </Avatar>
+          <UserAvatar user={post.user}/>
           <p className="text-sm ml-1.5 text-gray-400">
             <span className="font-bold">{post.user.name}</span>
             <span className="text-xs font-medium ml-1.5 text-background-accent">

@@ -16,7 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { newPost, updatePost } from '@/actions/post';
 import { FormError } from '../form-error';
 import { FormSuccess } from '../form-success';
@@ -34,10 +34,11 @@ interface PostFormInterface {
 }
 
 export const PostForm = ({ tags, status, post, organizationId, afterSubmit }: PostFormInterface) => {
-  console.log("🚀 ~ PostForm ~ post:", post)
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
+  const [isOwner, setOwner] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof PostSchema>>({
     resolver: zodResolver(PostSchema),
     defaultValues: {
@@ -50,7 +51,6 @@ export const PostForm = ({ tags, status, post, organizationId, afterSubmit }: Po
     },
   });
   const onSubmit = (values: z.infer<typeof PostSchema>) => {
-    console.log("🚀 ~ onSubmit ~ values:", values)
     setError(undefined);
     setSuccess(undefined);
     if(!post) {
@@ -84,6 +84,17 @@ export const PostForm = ({ tags, status, post, organizationId, afterSubmit }: Po
     }
    
   };
+
+
+  useEffect(() => {
+    async function checkOwnership() {
+      const res = await fetch(`/api/organization/owner/${organizationId}`);
+      const data = await res.json();
+      setOwner(data.isOwner);
+    }
+
+    checkOwnership();
+  }, [])
 
   return (
     <Card className="min-w-[400px] shadow-md">
@@ -160,7 +171,7 @@ export const PostForm = ({ tags, status, post, organizationId, afterSubmit }: Po
                   )}
                 />
               )}
-              {status && status.length > 0 && (
+              {isOwner && status && status.length > 0 && (
                 <FormField
                   control={form.control}
                   name="statusId"
@@ -195,7 +206,7 @@ export const PostForm = ({ tags, status, post, organizationId, afterSubmit }: Po
             </div>
             <FormError message={error} />
             <FormSuccess message={success} />
-            <Button type="submit" disabled={isPending} size={'lg'}>
+            <Button type="submit" disabled={isPending} size={'lg'} className='w-full'>
               Submit
             </Button>
           </form>

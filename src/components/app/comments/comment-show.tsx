@@ -1,10 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   fetchCommentsByPostId,
 } from '@/db/queries/comments';
 import ReplyCreateForm from './reply-create-form';
 import { User } from 'next-auth';
 import { getFormatter } from 'next-intl/server';
+import { UserAvatar } from '@/components/user-avatar';
 
 interface CommentShowProps {
   commentId: string;
@@ -47,13 +47,7 @@ export default async function CommentShow({
   return (
     <div>
       <div className="flex items-center">
-        <Avatar>
-          <AvatarImage
-            src={comment.user?.image ?? ''}
-            alt={comment.user?.name ?? 'unknown'}
-          />
-          <AvatarFallback>{comment.user?.name}</AvatarFallback>
-        </Avatar>
+        <UserAvatar user={comment.user}/>
         <p className="text-sm ml-1.5 text-gray-400">
           <span className="font-bold">{comment.user?.name}</span> |
           <span className="font-bold ml-1.5">

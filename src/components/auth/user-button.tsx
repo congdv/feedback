@@ -1,7 +1,5 @@
 'use client';
 
-import { FaUser } from 'react-icons/fa';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,18 +10,14 @@ import { useCurrentUser } from '@/hooks/use-current-user';
 import { LogoutButton } from './logout-button';
 import { SettingsButton } from './settings-button';
 import { LogOutIcon, Settings } from 'lucide-react';
+import { UserAvatar } from '../user-avatar';
 
 export const UserButton = () => {
   const user = useCurrentUser();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar>
-          <AvatarImage src={user?.image || ''} />
-          <AvatarFallback className="bg-sky-500">
-            <FaUser className="text-white" />
-          </AvatarFallback>
-        </Avatar>
+        <UserAvatar user={user}/>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="end">
         <SettingsButton>

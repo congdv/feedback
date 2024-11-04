@@ -31,6 +31,16 @@ export const newPost = async (values: z.infer<typeof PostSchema>) => {
       error: "Current organization is not valid"
     }
   }
+  if(!values.statusId) {
+    const defaultStatus = await DBClient.getInstance().prisma.status.findFirst({
+      where: {
+        slug: "in-review"
+      }
+    });
+    if(defaultStatus?.id) {
+      values.statusId = defaultStatus.id;
+    }
+  }
 
   const savedPost = await DBClient.getInstance().prisma.post.create({
     data: {
@@ -38,6 +48,13 @@ export const newPost = async (values: z.infer<typeof PostSchema>) => {
       userId: user?.id,
     },
   });
+
+  await DBClient.getInstance().prisma.postReaction.create({
+    data: {
+      postId: savedPost.id,
+      userId: user.id
+    }
+  })
   redirect(paths.postShow(existingOrganization.slug, savedPost.id));
 
 };
