@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
 
-## Getting Started
+  <h3 align="center">Feedback app</h3>
 
-First, run the development server:
+  <p align="center">
+    SaaS app for customer's feedbacks
+  </p>
+  <p align="center">Try it online at https://feedback.congdv.com</p>
+</div>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<!-- ABOUT THE PROJECT -->
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## About The Project
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Feedback is designed to streamline customer interactions, reduce response times, and increase customer satisfaction. With our easy-to-navigate platform, your team can focus on providing top-notch support without getting bogged down by complex tools.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+<!-- Features -->
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+1. Create your organization
+2. Get feedbacks on different organizations
+3. Visually roadmap for users
+4. ...
+<!-- USAGE EXAMPLES -->
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Usage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+![screenshot 1](./screenshot-1.png)
+![screenshot 2](./screenshot-2.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Development
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+TBD
+
+<!-- CONTRIBUTING -->
+
+## Contributing
+
+TBD
+
+<!-- LICENSE -->
+
+## License
+
+TBD
